@@ -1,0 +1,32 @@
+defscrollback 5000
+escape ^Jj
+msgwait 1
+
+#logfile "/tmp/log-screen-%Y%m%d-%n.log"
+#deflog on
+deflog off
+
+cjkwidth on
+#caption always "%{= Kw}%n %t"
+hardstatus alwayslastline "%{= kw}%`%-w%{=b rw}%n %t%{-}%+w %= %{= kW}%Y-%m-%d %D %02c"
+shell zsh
+
+bind ^w windowlist -b
+bind j focus down
+bind ^j focus down
+bind k focus up
+bind ^k focus up
+bind l focus right
+bind ^l focus right
+bind h focus left
+bind ^h focus left
+bind ^o only
+bind f select
+bind r remove
+
+defbce "on"
+attrcolor b ".I"
+term xterm-256color
+termcapinfo xterm 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm'
+#term xterm-256color
+#term screen-256color
