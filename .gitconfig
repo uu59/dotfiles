@@ -1,0 +1,13 @@
+[include]
+  path = .gitconfig.local
+[color]
+  auto = true
+  ui = auto
+[alias]
+  st="status"
+  ci="commit"
+  co="checkout"
+[push]
+  default = simple
+[merge]
+  log = true
