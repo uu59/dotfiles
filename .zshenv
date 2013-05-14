@@ -1,7 +1,13 @@
 export LS_COLORS="di=38;05;117"
 export EDITOR="vim"
-export CFLAGS="-O2 -march=native -pipe"
-export CXXFLAGS="${CFLAGS}"
+case ${OSTYPE} in
+  dargin*)
+    ;;
+  linux*)
+    export CFLAGS="-O2 -march=native -pipe"
+    export CXXFLAGS="${CFLAGS}"
+    ;;
+esac
 export GREP_OPTIONS='--binary-files=without-match --directories=skip --color=auto'
 export GISTY_DIR=$HOME/gisty
 
