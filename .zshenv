@@ -1,6 +1,6 @@
 export LS_COLORS="di=38;05;117"
 export EDITOR="vim"
-export GIT_EDITOR="vim -u NONE"
+export GIT_EDITOR="vim -u $HOME/.vimrc.basic"
 case ${OSTYPE} in
   dargin*)
     ;;
