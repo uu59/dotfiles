@@ -13,8 +13,7 @@ bashcompinit
 zstyle ':completion:*:sudo:*' command-path /usr/local/sbin /usr/local/bin /usr/sbin /usr/bin /sbin /bin
 zstyle ':vcs_info:*' formats '(%s)-[%b]'
 zstyle ':vcs_info:*' actionformats '(%s)-[%b|%a]'
-GIT_COMPLETION_FILE="${HOME}/src/git/contrib/completion/git-completion.sh"
-if [ -f "$GIT_COMPLETION_FILE" ];then
+if [ -n "$GIT_COMPLETION_FILE" -a -f "$GIT_COMPLETION_FILE" ];then
   zstyle ':completion:*:*:git:*' script $GIT_COMPLETION_FILE
 fi
 

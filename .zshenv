@@ -1,3 +1,5 @@
+GIT_COMPLETION_FILE="${HOME}/src/git/contrib/completion/git-completion.sh"
+
 export LS_COLORS="di=38;05;117"
 export EDITOR="vim"
 export GIT_EDITOR="vim -u $HOME/.vimrc.basic"
