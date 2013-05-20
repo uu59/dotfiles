@@ -4,6 +4,7 @@
 autoload -Uz compinit; compinit # 補完の利用設定
 autoload -Uz vcs_info
 autoload -U edit-command-line # C-x e
+
 zle -N edit-command-line
 autoload bashcompinit
 bashcompinit
@@ -19,6 +20,7 @@ fi
 
 zle_highlight=(isearch:fg="228",underline)
 
+autoload -Uz add-zsh-hook
 setopt prompt_subst
 setopt extended_history # 履歴ファイルに時刻を記録
 setopt always_last_prompt   # 無駄なスクロールを避ける
@@ -106,15 +108,15 @@ zle -N tcsh-backward-delete-word
 bindkey '^W' tcsh-backward-delete-word
 
 # PROMPT
-precmd () {
+PROMPT2="%B%{%F{082%}%__> %b"
+_vcs_info () {
   psvar=()
   LANG=C vcs_info
   [[ -n "$vcs_info_msg_0_" ]] && psvar[1]="$vcs_info_msg_0_"
   RPROMPT="%1(v|%{%F{190%}%1v%f|)"
   PROMPT="${USER}%B%{%F{${MY_COLOR_PROMPT_HOST:-207}%}@${HOST}%b:%~ %B%{%F{250%}(ruby-$(rbenv version-name))%b%f%(!.#.$) "
-
-  PROMPT2="%B%{%F{082%}%__> %b"
 }
+add-zsh-hook precmd _vcs_info
 # }}}
 
 # http://www.reddit.com/r/commandline/comments/12g76v/how_to_automatically_source_zshrc_in_all_open/
@@ -122,14 +124,11 @@ trap "source ~/.zshrc && rehash" USR1
 
 # GNU screen {{{
 
-if [ ${STY} ] ; then # screen
+if [ -n "${STY}" ] ; then # screen
   screen-title-set () {
-    [ ${STY} ] && [ $# -gt 0 ] && echo -ne '\ek'$1'\e\\'
+    [ -n "${STY}" ] && [ $# -gt 0 ] && echo -ne '\ek'${1%% *}'\e\\'
   }
-  preexec() {
-    screen-title-set ${1%% *}
-    #echo -ne "\ek${1%% *}\e\\"
-  }
+  add-zsh-hook preexec screen-title-set
 fi
 # }}}
 
