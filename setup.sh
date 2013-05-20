@@ -18,7 +18,7 @@ color_message() {
   local message=$1
   local color=$2
   if tty -s <&1; then
-    echo -e '\e['$color'm'$message'\e[0m'
+    echo -e '\x1B['$color'm'$message'\x1B[0m'
   else
     echo $message
   fi
