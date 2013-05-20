@@ -111,7 +111,7 @@ precmd () {
   LANG=C vcs_info
   [[ -n "$vcs_info_msg_0_" ]] && psvar[1]="$vcs_info_msg_0_"
   RPROMPT="%1(v|%{%F{190%}%1v%f|)"
-  PROMPT="${USER}%B%{%F{191%}@${HOST}%b:%~ %B%{%F{250%}(ruby-$(rbenv version-name))%b%f%(!.#.$) "
+  PROMPT="${USER}%B%{%F{${MY_COLOR_PROMPT_HOST:-207}%}@${HOST}%b:%~ %B%{%F{250%}(ruby-$(rbenv version-name))%b%f%(!.#.$) "
 
   PROMPT2="%B%{%F{082%}%__> %b"
 }
