@@ -37,8 +37,8 @@ cd $(cd $(dirname $0); pwd);
 for file in $(git ls-files); do
   if [ ! -f "${HOME}/${file}" ];then
     if [ "$file" != $(basename $0) ];then
-      green "hardlink $file"
-      ln $file $HOME/$file
+      green "symlink $file"
+      ln -s $_dir_/$file $HOME/$file
     fi
   else
     gray "~/$file exists. skip"
