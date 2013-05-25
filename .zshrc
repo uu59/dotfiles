@@ -6,27 +6,36 @@ _ZSH_DIRECTORY="$HOME/.zsh"
 if [[ -d "$_ZSH_DIRECTORY/zsh-completions/src" ]]; then
   fpath=($fpath "$_ZSH_DIRECTORY/zsh-completions/src")
 fi
+
 autoload -Uz compinit
 compinit -C # insecure but fast: http://d.hatena.ne.jp/ywatase/20071103
 
-autoload -Uz vcs_info
-autoload -U edit-command-line # C-x e
+autoload -Uz edit-command-line # C-x C-e
+autoload -Uz add-zsh-hook
 
 zle -N edit-command-line
-autoload bashcompinit
-bashcompinit
 
 # sudo でも補完の対象
 zstyle ':completion:*:sudo:*' command-path /usr/local/sbin /usr/local/bin /usr/sbin /usr/bin /sbin /bin
-zstyle ':vcs_info:*' formats '(%s)-[%b]'
-zstyle ':vcs_info:*' actionformats '(%s)-[%b|%a]'
-if [ -n "$GIT_COMPLETION_FILE" -a -f "$GIT_COMPLETION_FILE" ];then
-  zstyle ':completion:*:*:git:*' script $GIT_COMPLETION_FILE
-fi
+
+# -- vcs_info {{{
+  autoload -Uz vcs_info
+  zstyle ':vcs_info:*' formats '(%s)-[%b]'
+  zstyle ':vcs_info:*' actionformats '(%s)-[%b|%a]'
+  if [ -n "$GIT_COMPLETION_FILE" -a -f "$GIT_COMPLETION_FILE" ];then
+    zstyle ':completion:*:*:git:*' script $GIT_COMPLETION_FILE
+  fi
+  _vcs_info () {
+    psvar=()
+    LANG=C vcs_info
+    [[ -n "$vcs_info_msg_0_" ]] && psvar[1]="$vcs_info_msg_0_"
+  }
+  add-zsh-hook chpwd _vcs_info
+  _vcs_info # if zsh started in vcs directory
+# }}}
 
 zle_highlight=(isearch:fg="228",underline)
 
-autoload -Uz add-zsh-hook
 setopt prompt_subst
 setopt extended_history # 履歴ファイルに時刻を記録
 setopt always_last_prompt   # 無駄なスクロールを避ける
@@ -113,20 +122,19 @@ tcsh-backward-delete-word () {
 zle -N tcsh-backward-delete-word
 bindkey '^W' tcsh-backward-delete-word
 
-# PROMPT
-PROMPT2="%B%{%F{082%}%__> %b"
-_vcs_info () {
-  psvar=()
-  LANG=C vcs_info
-  [[ -n "$vcs_info_msg_0_" ]] && psvar[1]="$vcs_info_msg_0_"
-  RPROMPT="%1(v|%{%F{190%}%1v%f|)"
-  PROMPT="${USER}%B%{%F{${MY_COLOR_PROMPT_HOST:-207}%}@${HOST}%b:%~ %B%{%F{250%}(ruby-$(rbenv version-name))%b%f%(!.#.$) "
-}
-add-zsh-hook precmd _vcs_info
 # }}}
 
 # http://www.reddit.com/r/commandline/comments/12g76v/how_to_automatically_source_zshrc_in_all_open/
 trap "source ~/.zshrc && rehash" USR1
+
+# PROMPT {{{
+PROMPT2="%B%{%F{082%}%__> %b"
+RPROMPT="%1(v|%{%F{190%}%1v%f|)"
+_update_prompt () {
+  PROMPT="${USER}%B%{%F{${MY_COLOR_PROMPT_HOST:-207}%}@${HOST}%b:%~ %B%{%F{250%}(ruby-$(rbenv version-name))%b%f%(!.#.$) "
+}
+add-zsh-hook precmd _update_prompt
+# }}}
 
 # GNU screen {{{
 
