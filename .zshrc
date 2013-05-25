@@ -1,7 +1,14 @@
 # vim: set fdm=marker: 
 
 # autoload, zle, etc {{{
-autoload -Uz compinit; compinit # 補完の利用設定
+
+_ZSH_DIRECTORY="$HOME/.zsh"
+if [[ -d "$_ZSH_DIRECTORY/zsh-completions/src" ]]; then
+  fpath=($fpath "$_ZSH_DIRECTORY/zsh-completions/src")
+fi
+autoload -Uz compinit
+compinit -C # insecure but fast: http://d.hatena.ne.jp/ywatase/20071103
+
 autoload -Uz vcs_info
 autoload -U edit-command-line # C-x e
 
@@ -67,6 +74,7 @@ esac
 alias tmux="tmux -2"
 alias df="LANG=C df"
 alias sort="LC_ALL=C sort"
+
 
 # C で標準出力をクリップボードにコピーする
 # mollifier delta blog : http://mollifier.hatenablog.com/entry/20100317/p1

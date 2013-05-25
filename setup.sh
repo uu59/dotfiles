@@ -24,6 +24,9 @@ color_message() {
   fi
 }
 
+red() {
+  color_message "$1" "31"
+}
 green() {
   color_message "$1" "32"
 }
@@ -31,18 +34,23 @@ gray() {
   color_message "$1" "37"
 }
 
-_dir_=$(pwd)
-cd $(cd $(dirname $0); pwd);
+(
+  _dir_=$(pwd)
+  cd $(cd $(dirname $0); pwd);
+  git submodule update --init
 
-for file in $(git ls-files); do
-  if [ ! -f "${HOME}/${file}" ];then
-    if [ "$file" != $(basename $0) ];then
-      green "symlink $file"
-      ln -s $_dir_/$file $HOME/$file
+  for file in $(git ls-files | grep -v "^.git"); do
+    if [ -e "$HOME/$file" ];then
+      gray "~/$file exists. skip"
+    else
+      if [ "$file" != $(basename $0) ];then
+        green "symlink $file"
+        ln -s $_dir_/$file $HOME/$file
+      fi
     fi
-  else
-    gray "~/$file exists. skip"
-  fi
-done
+  done
+)
 
-cd $_dir_
+if [ $? -ne 0 ]; then
+  red "something error?"
+fi 
