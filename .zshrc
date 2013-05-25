@@ -8,8 +8,8 @@ if [[ -d "$_ZSH_DIRECTORY/zsh-completions/src" ]]; then
   fpath=($fpath "$_ZSH_DIRECTORY/zsh-completions/src")
 fi
 
-autoload -Uz compinit
-compinit -C # insecure but fast: http://d.hatena.ne.jp/ywatase/20071103
+autoload -U compinit
+compinit
 
 autoload -Uz edit-command-line # C-x C-e
 autoload -Uz add-zsh-hook
