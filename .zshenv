@@ -26,9 +26,15 @@ if [ -f $HOME/.zsh-local-only ]; then
   . $HOME/.zsh-local-only
 fi
 
-which rbenv > /dev/null
-if [ $? -eq 0 ]; then
-  eval "$(rbenv init -)"
+RBENV_ZSH_FILE="$HOME/.rbenv-zsh"
+if [ -f "$RBENV_ZSH_FILE" ]; then
+  source $RBENV_ZSH_FILE
+else
+  which rbenv > /dev/null
+  if [ $? -eq 0 ]; then
+    echo "$(rbenv init - --no-rehash)" > $RBENV_ZSH_FILE
+    source $RBENV_ZSH_FILE
+  fi
 fi
 
 export PATH=$HOME/.nodebrew/current/bin:$PATH
