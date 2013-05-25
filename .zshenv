@@ -1,6 +1,7 @@
 GIT_COMPLETION_FILE="${HOME}/src/git/contrib/completion/git-completion.sh"
 
 export LS_COLORS="di=38;05;117"
+export LESS="--LONG-PROMPT --ignore-case --no-init -RF"
 export EDITOR="vim"
 export GIT_EDITOR="vim -u $HOME/.vimrc.basic"
 case ${OSTYPE} in

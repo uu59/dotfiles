@@ -63,7 +63,6 @@ esac
 # }}}
 
 # variables & alias {{{
-export LESS="--LONG-PROMPT --ignore-case --no-init -RF"
 
 alias tmux="tmux -2"
 alias df="LANG=C df"
