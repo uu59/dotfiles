@@ -185,16 +185,6 @@ function colorcheck() {
 
 # completion {{{
 
-__bundle() {
-  local cachefile="/tmp/__bundle_completion"
-  if [ ! -f $cachefile ];then
-    echo $(bundle -h | col -b | grep -o "bundle .*(1)" | sed 's/(1)//g' | sed 's/bundle //g') > $cachefile
-  fi
-  COMPREPLY=($(compgen -W "$(cat $cachefile)"))
-}
-
-complete -F __bundle bundle
-
 # rake completion
 # http://weblog.rubyonrails.org/2006/3/9/fast-rake-task-completion-for-zsh
 # _rake_does_task_list_need_generating () {
