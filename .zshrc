@@ -113,6 +113,7 @@ bindkey "^R" history-incremental-pattern-search-backward
 bindkey "^G" history-incremental-pattern-search-forward
 #bindkey "^S" history-incremental-search-forward
 bindkey '\C-x\C-e' edit-command-line
+bindkey '^V' vi-quoted-insert
 
 # vimぽいC-w
 tcsh-backward-delete-word () {
