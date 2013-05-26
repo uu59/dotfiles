@@ -1,0 +1,66 @@
+# vim: set fdm=marker ft=zsh:
+
+
+# -- colorcheck() {{{
+
+function colorcheck() {
+  local FG=0
+  local BG=0
+
+  while getopts "fb" OPTION
+  do
+    case $OPTION in
+      "f" ) FG=1 ;;
+      "b" ) BG=1 ;;
+      *   ) echo 'Usage: colorcheck [-f] [-b]'; return 0;
+      ;;
+    esac
+  done
+
+  if [ $FG = 0 -a $BG = 0 ];then
+    FG=1;
+    BG=1;
+  fi
+
+  if [ $FG = 1 ];then
+    echo '\\033[0;38;05;XXXm Text \\033[0m'
+    for color in `seq -f '%03g' 0 255`; do
+      echo -n "\033[38;05;${color}m${color}\033[0m "
+    done
+    echo;
+  fi
+
+  if [ $BG = 1 ];then
+    echo '\\033[48;05;XXXm Text \\033[0m'
+    for color in `seq -f '%03g' 0 255`; do
+      echo -n "\033[48;05;${color}m${color}\033[0m  "
+    done
+    echo;
+  fi
+}
+
+# }}}
+
+# -- git_clean_or_dirty() {{{
+git_clean_or_dirty() {
+  STATUS="$(git status --porcelain -uall 2> /dev/null)"
+  if [ -z $STATUS ];then
+    echo ""
+  else
+    #all=$(echo $STATUS | wc -l )
+    #tracked=$(git status --porcelain -uno | wc -l)
+    #diff=$(expr $all - $tracked)
+    #echo "%F{009%}✦ $tracked$(if [ $diff -gt 0 ]; then echo " (+$diff)";fi) %f"
+    echo "%F{009%}✦ %f"
+  fi
+}
+# }}}
+
+# http://d.hatena.ne.jp/secondlife/20080218/1203303528
+# http://blog.m4i.jp/entry/2012/01/26/064329
+# autoload -Uz compinit compinit
+# source ~/.zsh/cdd/cdd
+# chpwd() {
+#     _cdd_chpwd
+# }
+

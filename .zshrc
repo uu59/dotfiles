@@ -21,8 +21,8 @@ zstyle ':completion:*:sudo:*' command-path /usr/local/sbin /usr/local/bin /usr/s
 
 # -- vcs_info {{{
   autoload -Uz vcs_info
-  zstyle ':vcs_info:*' formats '(%s)-[%b]'
-  zstyle ':vcs_info:*' actionformats '(%s)-[%b|%a]'
+  zstyle ':vcs_info:*' formats '%s:%b'
+  zstyle ':vcs_info:*' actionformats '%s:%b|%a'
   if [ -n "$GIT_COMPLETION_FILE" -a -f "$GIT_COMPLETION_FILE" ];then
     zstyle ':completion:*:*:git:*' script $GIT_COMPLETION_FILE
   fi
@@ -131,9 +131,9 @@ trap "source ~/.zshrc && rehash" USR1
 
 # PROMPT {{{
 PROMPT2="%B%{%F{082%}%__> %b"
-RPROMPT="%1(v|%{%F{190%}%1v%f|)"
+RPROMPT='%1(v|%{%F{190%}$(git_clean_or_dirty)%f%F{190%}%1v%f|)'
 _update_prompt () {
-  PROMPT="${USER}%B%{%F{${MY_COLOR_PROMPT_HOST:-207}%}@${HOST}%b:%~ %B%{%F{250%}(ruby-$(rbenv version-name))%b%f%(!.#.$) "
+  PROMPT="${USER}%{%F{${MY_COLOR_PROMPT_HOST:-207}%}@${HOST}%f:%~ %{%F{248%}(ruby-$(rbenv version-name))%f %(!.#.$) "
 }
 add-zsh-hook precmd _update_prompt
 # }}}
@@ -148,54 +148,6 @@ if [ -n "${STY}" ] ; then # screen
 fi
 # }}}
 
-# function {{{
-
-# -- colorcheck() {{{
-
-function colorcheck() {
-  local FG=0
-  local BG=0
-
-  while getopts "fb" OPTION
-  do 
-    case $OPTION in
-      "f" ) FG=1 ;;
-      "b" ) BG=1 ;;
-      *   ) echo 'Usage: colorcheck [-f] [-b]'; return 0;
-      ;;
-    esac
-  done
-
-  if [ $FG = 0 -a $BG = 0 ];then
-    FG=1;
-    BG=1;
-  fi
-
-  if [ $FG = 1 ];then
-    echo '\\033[0;38;05;XXXm Text \\033[0m'
-    for color in `seq -f '%03g' 0 255`; do
-      echo -n "\033[38;05;${color}m${color}\033[0m "
-    done
-    echo;
-  fi
-
-  if [ $BG = 1 ];then
-    echo '\\033[48;05;XXXm Text \\033[0m'
-    for color in `seq -f '%03g' 0 255`; do
-      echo -n "\033[48;05;${color}m${color}\033[0m  "
-    done
-    echo;
-  fi
-}
-
-# }}}
-
-# http://d.hatena.ne.jp/secondlife/20080218/1203303528
-# http://blog.m4i.jp/entry/2012/01/26/064329
-# autoload -Uz compinit compinit
-# source ~/.zsh/cdd/cdd
-# chpwd() {
-#     _cdd_chpwd
-# }
-
-# }}}
+if [ -f "$HOME/.zsh/functions" ];then
+  source $HOME/.zsh/functions
+fi
