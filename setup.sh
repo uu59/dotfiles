@@ -39,13 +39,17 @@ gray() {
   cd $(cd $(dirname $0); pwd);
   git submodule update --init
 
-  for file in $(git ls-files | grep -v "^.git"); do
-    if [ -e "$HOME/$file" ];then
-      gray "~/$file exists. skip"
-    else
-      if [ "$file" != $(basename $0) ];then
-        green "symlink $file"
-        ln -s $_dir_/$file $HOME/$file
+  blacklist=".git .gitignore .gitmodules setup.sh README.mkd"
+  for file in $(find $_dir_ -mindepth 1 -maxdepth 1); do
+    if [ -z "$(echo $blacklist | grep -F $(basename $file))" ];then
+      dst="$HOME/$(basename $file)"
+      if [ -e "$dst" ];then
+        gray "~${dst#$HOME} exists. skip"
+      else
+        if [ "$file" != $(basename $0) ];then
+          green "symlink $file"
+          ln -s $file $dst
+        fi
       fi
     fi
   done
