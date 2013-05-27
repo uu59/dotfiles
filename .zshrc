@@ -20,19 +20,16 @@ zle -N edit-command-line
 zstyle ':completion:*:sudo:*' command-path /usr/local/sbin /usr/local/bin /usr/sbin /usr/bin /sbin /bin
 
 # -- vcs_info {{{
-  autoload -Uz vcs_info
-  zstyle ':vcs_info:*' formats '%s:%b'
-  zstyle ':vcs_info:*' actionformats '%s:%b|%a'
-  if [ -n "$GIT_COMPLETION_FILE" -a -f "$GIT_COMPLETION_FILE" ];then
-    zstyle ':completion:*:*:git:*' script $GIT_COMPLETION_FILE
-  fi
-  _vcs_info () {
-    psvar=()
-    LANG=C vcs_info
-    [[ -n "$vcs_info_msg_0_" ]] && psvar[1]="$vcs_info_msg_0_"
-  }
-  add-zsh-hook chpwd _vcs_info
-  _vcs_info # if zsh started in vcs directory
+autoload -Uz vcs_info
+zstyle ':vcs_info:*' max-exports 3
+
+zstyle ':vcs_info:*' formats '%s:[%b]'
+# %m is expanded to empty string
+zstyle ':vcs_info:*' actionformats '%s[%b]' '%m' '<⚑ %a>'
+zstyle ':vcs_info:(svn|bzr):*' branchformat '%b:r%r'
+if [ -n "$GIT_COMPLETION_FILE" -a -f "$GIT_COMPLETION_FILE" ];then
+  zstyle ':completion:*:*:git:*' script $GIT_COMPLETION_FILE
+fi
 # }}}
 
 zle_highlight=(isearch:fg="228",underline)
@@ -131,9 +128,24 @@ trap "source ~/.zshrc && rehash" USR1
 
 # PROMPT {{{
 PROMPT2="%B%{%F{082%}%__> %b"
-RPROMPT='%1(v|%{%F{190%}$(git_clean_or_dirty)%f%F{190%}%1v%f|)'
 _update_prompt () {
-  PROMPT="${USER}%{%F{${MY_COLOR_PROMPT_HOST:-207}%}@${HOST}%f:%~ %{%F{248%}(ruby-$(rbenv version-name))%f %(!.#.$) "
+  PROMPT="${USER}%{%F{${MY_COLOR_PROMPT_HOST:-207}%}@${HOST}%f:%~ %{%F{248%}$(ruby_version)%f %(!.#.$) "
+  (git rev-parse --is-inside-git-work-tree 2>/dev/null 1>&2)
+  if [ $? -ne 0 ];then
+    RPROMPT=""
+    return 0
+  fi
+
+  LANG=C vcs_info
+  # 0: main
+  # 1: misc
+  # 2: rebase/merge
+  local prompt="%{%F{${MY_COLOR_PROMPT_GIT_0:-190}%}$(git_clean_or_dirty)%f"
+  prompt="$prompt%F{${MY_COLOR_PROMPT_GIT_0:-190}%}$vcs_info_msg_0_%f"
+  if [ -n "$vcs_info_msg_2_" ]; then
+    prompt="$prompt %F{${MY_COLOR_PROMPT_GIT_2:-189}%}$vcs_info_msg_2_%f"
+  fi
+  RPROMPT=$prompt
 }
 add-zsh-hook precmd _update_prompt
 # }}}

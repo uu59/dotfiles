@@ -56,6 +56,16 @@ git_clean_or_dirty() {
 }
 # }}}
 
+# -- ruby_version() {{{
+ruby_version() {
+  which rbenv > /dev/null
+  if [ $? -ne 0 ];then
+    return
+  fi
+  echo "(ruby-$(rbenv version-name))"
+}
+# }}}
+
 # http://d.hatena.ne.jp/secondlife/20080218/1203303528
 # http://blog.m4i.jp/entry/2012/01/26/064329
 # autoload -Uz compinit compinit
