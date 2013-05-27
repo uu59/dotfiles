@@ -43,8 +43,8 @@ function colorcheck() {
 
 # -- git_clean_or_dirty() {{{
 git_clean_or_dirty() {
-  STATUS="$(git status --porcelain -uall 2> /dev/null)"
-  if [ -z $STATUS ];then
+  local STATUS="$(git status --porcelain -uall 2> /dev/null)"
+  if [ -z "$STATUS" ];then
     echo ""
   else
     #all=$(echo $STATUS | wc -l )
@@ -58,7 +58,7 @@ git_clean_or_dirty() {
 
 # -- ruby_version() {{{
 ruby_version() {
-  which rbenv > /dev/null
+  which rbenv > /dev/null 2>&1
   if [ $? -ne 0 ];then
     return
   fi

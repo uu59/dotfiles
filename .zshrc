@@ -2,7 +2,7 @@
 
 # autoload, zle, etc {{{
 
-_ZSH_DIRECTORY="$HOME/.zsh"
+local _ZSH_DIRECTORY="$HOME/.zsh"
 if [[ -d "$_ZSH_DIRECTORY/zsh-completions/src" ]]; then
   # set $fpath before compinit
   fpath=($fpath "$_ZSH_DIRECTORY/zsh-completions/src")
@@ -27,10 +27,13 @@ zstyle ':vcs_info:*' formats '%s:[%b]'
 # %m is expanded to empty string
 zstyle ':vcs_info:*' actionformats '%s[%b]' '%m' '<⚑ %a>'
 zstyle ':vcs_info:(svn|bzr):*' branchformat '%b:r%r'
+
+# }}}
+
+local GIT_COMPLETION_FILE="${GIT_COMPLETION_FILE:-${HOME}/src/git/contrib/completion/git-completion.sh}"
 if [ -n "$GIT_COMPLETION_FILE" -a -f "$GIT_COMPLETION_FILE" ];then
   zstyle ':completion:*:*:git:*' script $GIT_COMPLETION_FILE
 fi
-# }}}
 
 zle_highlight=(isearch:fg="228",underline)
 

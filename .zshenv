@@ -1,5 +1,3 @@
-GIT_COMPLETION_FILE="${HOME}/src/git/contrib/completion/git-completion.sh"
-
 export LS_COLORS="di=38;05;117"
 export LESS="--LONG-PROMPT --ignore-case --no-init -RF"
 export EDITOR="vim"
@@ -23,13 +21,13 @@ export CHROME_OPTIONS="--no-referrers --disk-cache-dir=/tmp/chromecache --disk-c
   --disable-sync --disable-geolocation --disable-content-prefetch --disable-preconnect --disable-connect-backup-jobs \
    "
 
-if [ -f $HOME/.zsh-local-only ]; then
-  . $HOME/.zsh-local-only
+if [ -f "$HOME/.zsh-local-only" ]; then
+  . "$HOME/.zsh-local-only"
 fi
 
-which rbenv > /dev/null
+which rbenv > /dev/null 2>&1
 if [ $? -eq 0 ]; then
   eval "$(rbenv init - --no-rehash)"
 fi
 
-export PATH=$HOME/.nodebrew/current/bin:$PATH
+export PATH="$HOME/.nodebrew/current/bin:$PATH"
