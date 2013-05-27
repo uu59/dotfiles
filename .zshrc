@@ -133,13 +133,12 @@ trap "source ~/.zshrc && rehash" USR1
 PROMPT2="%B%{%F{082%}%__> %b"
 _update_prompt () {
   PROMPT="${USER}%{%F{${MY_COLOR_PROMPT_HOST:-207}%}@${HOST}%f:%~ %{%F{248%}$(ruby_version)%f %(!.#.$) "
-  (git rev-parse --is-inside-git-work-tree 2>/dev/null 1>&2)
-  if [ $? -ne 0 ];then
+  LANG=C vcs_info
+  if [ -z "$vcs_info_msg_0_" ];then
     RPROMPT=""
     return 0
   fi
 
-  LANG=C vcs_info
   # 0: main
   # 1: misc
   # 2: rebase/merge
