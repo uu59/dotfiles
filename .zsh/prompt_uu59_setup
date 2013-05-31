@@ -1,0 +1,52 @@
+# vim: set ft=zsh:
+
+prompt_uu59_setup () {
+  PROMPT2="%B%{%F{082%}%__> %b"
+  add-zsh-hook precmd _uu59_update_prompt
+}
+
+_uu59_update_prompt () {
+  PROMPT="%n%{%F{${MY_COLOR_PROMPT_HOST:-207}%}@%m%f:%~$(ruby_version)%(!.#.$) "
+  LANG=C vcs_info
+  if [ -z "$vcs_info_msg_0_" ];then
+    RPROMPT=""
+    return 0
+  fi
+
+  # 0: main
+  # 1: misc
+  # 2: rebase/merge
+  local prompt="%{%F{${MY_COLOR_PROMPT_GIT_0:-190}%}$(git_clean_or_dirty)%f"
+  prompt="$prompt%F{${MY_COLOR_PROMPT_GIT_0:-190}%}$vcs_info_msg_0_%f"
+  if [ -n "$vcs_info_msg_2_" ]; then
+    prompt="$prompt %F{${MY_COLOR_PROMPT_GIT_2:-189}%}$vcs_info_msg_2_%f"
+  fi
+  RPROMPT=$prompt
+}
+
+# -- ruby_version() {{{
+ruby_version() {
+  which rbenv > /dev/null 2>&1
+  if [ $? -ne 0 ];then
+    return
+  fi
+  echo " %{%F{248%}(ruby-$(rbenv version-name))%f "
+}
+# }}}
+
+# -- git_clean_or_dirty() {{{
+git_clean_or_dirty() {
+  local STATUS="$(git status --porcelain -uall 2> /dev/null)"
+  if [ -z "$STATUS" ];then
+    echo ""
+  else
+    #all=$(echo $STATUS | wc -l )
+    #tracked=$(git status --porcelain -uno | wc -l)
+    #diff=$(expr $all - $tracked)
+    #echo "%F{009%}✦ $tracked$(if [ $diff -gt 0 ]; then echo " (+$diff)";fi) %f"
+    echo "%F{009%}✦ %f"
+  fi
+}
+# }}}
+
+prompt_uu59_setup "$@"

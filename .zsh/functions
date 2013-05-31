@@ -41,30 +41,6 @@ function colorcheck() {
 
 # }}}
 
-# -- git_clean_or_dirty() {{{
-git_clean_or_dirty() {
-  local STATUS="$(git status --porcelain -uall 2> /dev/null)"
-  if [ -z "$STATUS" ];then
-    echo ""
-  else
-    #all=$(echo $STATUS | wc -l )
-    #tracked=$(git status --porcelain -uno | wc -l)
-    #diff=$(expr $all - $tracked)
-    #echo "%F{009%}✦ $tracked$(if [ $diff -gt 0 ]; then echo " (+$diff)";fi) %f"
-    echo "%F{009%}✦ %f"
-  fi
-}
-# }}}
-
-# -- ruby_version() {{{
-ruby_version() {
-  which rbenv > /dev/null 2>&1
-  if [ $? -ne 0 ];then
-    return
-  fi
-  echo " %{%F{248%}(ruby-$(rbenv version-name))%f "
-}
-# }}}
 
 # http://d.hatena.ne.jp/secondlife/20080218/1203303528
 # http://blog.m4i.jp/entry/2012/01/26/064329

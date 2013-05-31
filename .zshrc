@@ -7,9 +7,14 @@ if [[ -d "$_ZSH_DIRECTORY/zsh-completions/src" ]]; then
   # set $fpath before compinit
   fpath=($fpath "$_ZSH_DIRECTORY/zsh-completions/src")
 fi
+fpath=($fpath "$_ZSH_DIRECTORY")
 
 autoload -U compinit
 compinit
+
+autoload -U promptinit
+promptinit
+prompt "${ZSH_THEME:-"uu59"}"
 
 autoload -Uz edit-command-line # C-x C-e
 autoload -Uz add-zsh-hook
@@ -126,29 +131,6 @@ bindkey '^W' tcsh-backward-delete-word
 
 # http://www.reddit.com/r/commandline/comments/12g76v/how_to_automatically_source_zshrc_in_all_open/
 trap "source ~/.zshrc && rehash" USR1
-
-# PROMPT {{{
-PROMPT2="%B%{%F{082%}%__> %b"
-_update_prompt () {
-  PROMPT="%n%{%F{${MY_COLOR_PROMPT_HOST:-207}%}@%m%f:%~$(ruby_version)%(!.#.$) "
-  LANG=C vcs_info
-  if [ -z "$vcs_info_msg_0_" ];then
-    RPROMPT=""
-    return 0
-  fi
-
-  # 0: main
-  # 1: misc
-  # 2: rebase/merge
-  local prompt="%{%F{${MY_COLOR_PROMPT_GIT_0:-190}%}$(git_clean_or_dirty)%f"
-  prompt="$prompt%F{${MY_COLOR_PROMPT_GIT_0:-190}%}$vcs_info_msg_0_%f"
-  if [ -n "$vcs_info_msg_2_" ]; then
-    prompt="$prompt %F{${MY_COLOR_PROMPT_GIT_2:-189}%}$vcs_info_msg_2_%f"
-  fi
-  RPROMPT=$prompt
-}
-add-zsh-hook precmd _update_prompt
-# }}}
 
 # GNU screen {{{
 
