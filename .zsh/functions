@@ -62,7 +62,7 @@ ruby_version() {
   if [ $? -ne 0 ];then
     return
   fi
-  echo "(ruby-$(rbenv version-name))"
+  echo " %{%F{248%}(ruby-$(rbenv version-name))%f "
 }
 # }}}
 

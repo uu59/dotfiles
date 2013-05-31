@@ -24,7 +24,7 @@ autoload -Uz vcs_info
 zstyle ':vcs_info:*' max-exports 3
 
 zstyle ':vcs_info:*' formats '%s:[%b]'
-# %m is expanded to empty string
+# %m is expanded to empty string if hg-mg/stgit are unavailable
 zstyle ':vcs_info:*' actionformats '%s[%b]' '%m' '<⚑ %a>'
 zstyle ':vcs_info:(svn|bzr):*' branchformat '%b:r%r'
 
@@ -37,7 +37,7 @@ fi
 
 zle_highlight=(isearch:fg="228",underline)
 
-setopt prompt_subst
+setopt prompt_subst # PROMPTの中身を展開
 setopt extended_history # 履歴ファイルに時刻を記録
 setopt always_last_prompt   # 無駄なスクロールを避ける
 setopt append_history # 複数の zsh を同時に使う時など history ファイルに上書きせず追加
@@ -46,10 +46,8 @@ setopt NO_beep # ビープ音を鳴らさないようにする
 setopt hist_ignore_dups # 直前と同じコマンドラインはヒストリに追加しない
 #setopt hist_ignore_all_dups # 重複したヒストリは追加しない
 setopt share_history # シェルのプロセスごとに履歴を共有
-# 補完候補が複数あるときに自動的に一覧表示する
-setopt auto_menu
-# 高機能なワイルドカード展開を使用する
-setopt extended_glob
+setopt auto_menu # 補完候補が複数あるときに自動的に一覧表示する
+setopt extended_glob # 高機能なワイルドカード展開を使用する
 
 setopt transient_rprompt # http://www.machu.jp/diary/20130114.html
 
@@ -132,7 +130,7 @@ trap "source ~/.zshrc && rehash" USR1
 # PROMPT {{{
 PROMPT2="%B%{%F{082%}%__> %b"
 _update_prompt () {
-  PROMPT="${USER}%{%F{${MY_COLOR_PROMPT_HOST:-207}%}@${HOST}%f:%~ %{%F{248%}$(ruby_version)%f %(!.#.$) "
+  PROMPT="%n%{%F{${MY_COLOR_PROMPT_HOST:-207}%}@%m%f:%~$(ruby_version)%(!.#.$) "
   LANG=C vcs_info
   if [ -z "$vcs_info_msg_0_" ];then
     RPROMPT=""
