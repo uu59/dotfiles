@@ -1,6 +1,8 @@
 # vim: set ft=zsh:
 
 prompt_uu59_setup () {
+  autoload -Uz add-zsh-hook
+  autoload -Uz vcs_info
   PROMPT2="%B%{%F{082%}%__> %b"
   add-zsh-hook precmd _uu59_update_prompt
 }
