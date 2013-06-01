@@ -6,6 +6,11 @@ prompt_uu59_setup () {
 }
 
 _uu59_update_prompt () {
+  if ! (prompt -c | grep -w uu59 > /dev/null); then
+    add-zsh-hook -d precmd _uu59_update_prompt
+    return
+  fi
+
   PROMPT="%n%{%F{${MY_COLOR_PROMPT_HOST:-207}%}@%m%f:%~$(ruby_version)%(!.#.$) "
   LANG=C vcs_info
   if [ -z "$vcs_info_msg_0_" ];then
