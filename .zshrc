@@ -7,11 +7,21 @@ if [[ -d "$_ZSH_DIRECTORY/zsh-completions/src" ]]; then
   # set $fpath before compinit
   fpath=($fpath "$_ZSH_DIRECTORY/zsh-completions/src")
 fi
-fpath=($fpath "$_ZSH_DIRECTORY/prompt")
-
 autoload -Uz compinit
 compinit
 
+zstyle ':completion:*:sudo:*' command-path /usr/local/sbin /usr/local/bin /usr/sbin /usr/bin /sbin /bin
+zstyle ':completion:*' verbose no
+zstyle ':completion:*:kill:*' verbose yes
+zstyle ':completion:*:kill:*' command 'ps f -u$USER -o pid,%cpu,cmd'
+zstyle ':completion:*:kill:*' menu select=1 # select=n means open selector if matches > n
+zstyle ':completion:*' completer _complete _ignored # default: _complete _ignored
+zstyle ':completion:*' use-cache on
+zstyle ':completion:*' cache-path ~/.zsh/cache
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+
+
+fpath=($fpath "$_ZSH_DIRECTORY/prompt")
 autoload -Uz promptinit
 promptinit
 prompt "${ZSH_THEME:-"uu59"}"
@@ -20,9 +30,6 @@ autoload -Uz edit-command-line # C-x C-e
 autoload -Uz add-zsh-hook
 
 zle -N edit-command-line
-
-# sudo でも補完の対象
-zstyle ':completion:*:sudo:*' command-path /usr/local/sbin /usr/local/bin /usr/sbin /usr/bin /sbin /bin
 
 # -- vcs_info {{{
 autoload -Uz vcs_info
@@ -53,6 +60,7 @@ setopt hist_ignore_dups # 直前と同じコマンドラインはヒストリに
 setopt share_history # シェルのプロセスごとに履歴を共有
 setopt auto_menu # 補完候補が複数あるときに自動的に一覧表示する
 setopt extended_glob # 高機能なワイルドカード展開を使用する
+setopt magic_equal_subst     # コマンドラインの引数で --prefix=/usr などの = 以降でも補完できる
 
 setopt transient_rprompt # http://www.machu.jp/diary/20130114.html
 
