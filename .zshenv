@@ -25,8 +25,7 @@ if [ -f "$HOME/.zsh-local-only" ]; then
   . "$HOME/.zsh-local-only"
 fi
 
-which rbenv > /dev/null 2>&1
-if [ $? -eq 0 ]; then
+if [ $+commands[rbenv] -ne 0 ]; then
   eval "$(rbenv init - --no-rehash)"
 fi
 
