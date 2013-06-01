@@ -9,10 +9,10 @@ if [[ -d "$_ZSH_DIRECTORY/zsh-completions/src" ]]; then
 fi
 fpath=($fpath "$_ZSH_DIRECTORY")
 
-autoload -U compinit
+autoload -Uz compinit
 compinit
 
-autoload -U promptinit
+autoload -Uz promptinit
 promptinit
 prompt "${ZSH_THEME:-"uu59"}"
 
