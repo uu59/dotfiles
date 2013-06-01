@@ -47,7 +47,7 @@ _uu59_update_prompt () {
   local prompt="%{%F{${MY_COLOR_PROMPT_GIT_0:-190}%}$(git_clean_or_dirty)%f"
   prompt+="%F{${MY_COLOR_PROMPT_GIT_0:-190}%}$vcs_info_msg_0_%f"
   if [ -n "$vcs_info_msg_2_" ]; then
-    prompt+="$prompt %F{${MY_COLOR_PROMPT_GIT_2:-189}%}$vcs_info_msg_2_%f"
+    prompt+=" %F{${MY_COLOR_PROMPT_GIT_2:-189}%}$vcs_info_msg_2_%f"
   fi
   RPROMPT=$prompt
 }
