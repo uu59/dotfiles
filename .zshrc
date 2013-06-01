@@ -7,7 +7,7 @@ if [[ -d "$_ZSH_DIRECTORY/zsh-completions/src" ]]; then
   # set $fpath before compinit
   fpath=($fpath "$_ZSH_DIRECTORY/zsh-completions/src")
 fi
-fpath=($fpath "$_ZSH_DIRECTORY")
+fpath=($fpath "$_ZSH_DIRECTORY/prompt")
 
 autoload -Uz compinit
 compinit

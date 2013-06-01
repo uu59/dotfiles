@@ -33,11 +33,18 @@ _uu59_update_prompt () {
 
 # -- ruby_version() {{{
 ruby_version() {
-  which rbenv > /dev/null 2>&1
-  if [ $? -ne 0 ];then
-    return
+  local version=""
+  if [ $+commands[rbenv] -ne 0 ];then
+    version=$(rbenv version-name)
+  elif [ $+commands[rvm-prompt] ]; then
+    version=$(rvm-prompt)
+  elif [ $+commands[ruby] -ne 0] ;then
+    version=$(ruby -e 'print %Q!#{RUBY_VERSION}-p#{RUBY_PATCHLEVEL}!')
   fi
-  echo " %{%F{248%}(ruby-$(rbenv version-name))%f "
+
+  if [ -n "$version" ];then
+    echo " %{%F{248%}(ruby-$(rbenv version-name))%f "
+  fi
 }
 # }}}
 
