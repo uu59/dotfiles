@@ -34,6 +34,7 @@ zle -N edit-command-line
 # -- vcs_info {{{
 autoload -Uz vcs_info
 zstyle ':vcs_info:*' max-exports 3
+zstyle ':vcs_info:*' enable git svn hg
 
 zstyle ':vcs_info:*' formats '%s:[%b]'
 # %m is expanded to empty string if hg-mg/stgit are unavailable

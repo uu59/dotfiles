@@ -1,19 +1,41 @@
 # vim: set ft=zsh:
 
+_UPDATE_RUBY_VER=0
+
 prompt_uu59_setup () {
   autoload -Uz add-zsh-hook
   autoload -Uz vcs_info
   PROMPT2="%B%{%F{082%}%__> %b"
   add-zsh-hook precmd _uu59_update_prompt
+  add-zsh-hook preexec _uu59_detect_change_ruby
+  PROMPT="%n%{%F{${MY_COLOR_PROMPT_HOST:-207}%}@%m%f:%~$(ruby_version)%(!.#.$) "
+}
+
+_uu59_cleanup_hooks () {
+  if ! (prompt -c | grep -F -w uu59 > /dev/null); then
+    add-zsh-hook -d precmd _uu59_update_prompt
+    add-zsh-hook -d preexec _uu59_detect_change_ruby
+    return
+  fi
+}
+
+_uu59_detect_change_ruby () {
+  # rbenv version-name is slow (0.1 sec for me)
+  # so don't call it if its unnecessary
+  if (echo "rbenv rvm rm cd" | grep -w "${2%% *}" > /dev/null 2>&1) ;then
+    # `rbenv version-name` returns incorrect version because it will be called before command completed
+    _UPDATE_RUBY_VER=1
+  fi
 }
 
 _uu59_update_prompt () {
-  if ! (prompt -c | grep -w uu59 > /dev/null); then
-    add-zsh-hook -d precmd _uu59_update_prompt
-    return
+  _uu59_cleanup_hooks
+
+  if [ $_UPDATE_RUBY_VER = "1" ];then
+    _UPDATE_RUBY_VER=0
+    PROMPT="%n%{%F{${MY_COLOR_PROMPT_HOST:-207}%}@%m%f:%~$(ruby_version)%(!.#.$) "
   fi
 
-  PROMPT="%n%{%F{${MY_COLOR_PROMPT_HOST:-207}%}@%m%f:%~$(ruby_version)%(!.#.$) "
   LANG=C vcs_info
   if [ -z "$vcs_info_msg_0_" ];then
     RPROMPT=""
@@ -24,9 +46,9 @@ _uu59_update_prompt () {
   # 1: misc
   # 2: rebase/merge
   local prompt="%{%F{${MY_COLOR_PROMPT_GIT_0:-190}%}$(git_clean_or_dirty)%f"
-  prompt="$prompt%F{${MY_COLOR_PROMPT_GIT_0:-190}%}$vcs_info_msg_0_%f"
+  prompt+="%F{${MY_COLOR_PROMPT_GIT_0:-190}%}$vcs_info_msg_0_%f"
   if [ -n "$vcs_info_msg_2_" ]; then
-    prompt="$prompt %F{${MY_COLOR_PROMPT_GIT_2:-189}%}$vcs_info_msg_2_%f"
+    prompt+="$prompt %F{${MY_COLOR_PROMPT_GIT_2:-189}%}$vcs_info_msg_2_%f"
   fi
   RPROMPT=$prompt
 }
@@ -43,7 +65,7 @@ ruby_version() {
   fi
 
   if [ -n "$version" ];then
-    echo " %{%F{248%}(ruby-$(rbenv version-name))%f "
+    echo " %{%F{248%}(ruby-$version)%f "
   fi
 }
 # }}}
