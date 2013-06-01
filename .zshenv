@@ -1,3 +1,4 @@
+#zmodload zsh/zprof && zprof
 export LS_COLORS="di=38;05;117"
 export LESS="--LONG-PROMPT --ignore-case --no-init -RF"
 export EDITOR="vim"

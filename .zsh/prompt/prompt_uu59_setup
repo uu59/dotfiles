@@ -1,6 +1,6 @@
 # vim: set ft=zsh:
 
-_UPDATE_RUBY_VER=0
+_UPDATE_RUBY_VER=1
 
 prompt_uu59_setup () {
   autoload -Uz add-zsh-hook
@@ -8,7 +8,6 @@ prompt_uu59_setup () {
   PROMPT2="%B%{%F{082%}%__> %b"
   add-zsh-hook precmd _uu59_update_prompt
   add-zsh-hook preexec _uu59_detect_change_ruby
-  PROMPT="%n%{%F{${MY_COLOR_PROMPT_HOST:-207}%}@%m%f:%~$(ruby_version)%(!.#.$) "
 }
 
 _uu59_cleanup_hooks () {

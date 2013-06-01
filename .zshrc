@@ -1,5 +1,6 @@
 # vim: set fdm=marker: 
 
+
 # autoload, zle, etc {{{
 
 local _ZSH_DIRECTORY="$HOME/.zsh"
@@ -8,13 +9,10 @@ if [[ -d "$_ZSH_DIRECTORY/zsh-completions/src" ]]; then
   fpath=($fpath "$_ZSH_DIRECTORY/zsh-completions/src")
 fi
 autoload -Uz compinit
-compinit
+compinit -C
 
 zstyle ':completion:*:sudo:*' command-path /usr/local/sbin /usr/local/bin /usr/sbin /usr/bin /sbin /bin
 zstyle ':completion:*' verbose no
-zstyle ':completion:*:kill:*' verbose yes
-zstyle ':completion:*:kill:*' command 'ps f -u$USER -o pid,%cpu,cmd'
-zstyle ':completion:*:kill:*' menu select=1 # select=n means open selector if matches > n
 zstyle ':completion:*' completer _complete _ignored # default: _complete _ignored
 zstyle ':completion:*' use-cache on
 zstyle ':completion:*' cache-path ~/.zsh/cache
@@ -153,4 +151,8 @@ fi
 
 if [ -f "$HOME/.zsh/functions" ];then
   source $HOME/.zsh/functions
+fi
+
+if (which zprof > /dev/null) ;then
+  zprof | less
 fi
