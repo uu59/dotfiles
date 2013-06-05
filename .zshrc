@@ -75,8 +75,8 @@ export REPORTTIME=1
 # }}}
 
 # platform {{{
-case ${OSTYPE} in
-  dargin*)
+case "${OSTYPE}" in
+  darwin*)
     alias ls="ls -G"
     alias seq="gseq" # mainly for colorcheck()
     ;;
