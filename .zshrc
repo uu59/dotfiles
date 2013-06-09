@@ -1,5 +1,6 @@
 # vim: set fdm=marker: 
 
+export TERM=xterm-256color
 
 # autoload, zle, etc {{{
 
