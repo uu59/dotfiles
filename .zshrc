@@ -154,6 +154,6 @@ if [ -f "$HOME/.zsh/functions" ];then
   source $HOME/.zsh/functions
 fi
 
-if (which zprof > /dev/null) ;then
+if (which zprof > /dev/null 2>&1) ;then
   zprof | less
 fi
