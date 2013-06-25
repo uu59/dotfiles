@@ -1,0 +1,13 @@
+# vim: set fdm=marker ft=zsh:
+
+gitchoice() {
+  (git rev-parse >/dev/null 2>&1)
+
+  if [ $? -ne 0 ];then
+    echo "You are not in git repository.";
+  else
+    hash=$(git log --oneline --decorate=full --all | percol --match-method migemo | awk '{print $1}' | xargs git rev-parse)
+    echo \$hash=$hash
+    return $hash
+  fi
+}

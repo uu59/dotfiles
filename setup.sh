@@ -53,6 +53,14 @@ gray() {
       fi
     fi
   done
+
+  if [ ! -d $HOME/.percol.d -o ! -e $HOME/.percol.d/rc.py ]; then
+    mkdir -p $HOME/.percol.d
+    ln -s $_dir_/.zsh/percol/rc.py $HOME/.percol.d/
+    green "symlink ~/.percol.d/rc.py"
+  else
+    gray "~/.percol.d exists. skip"
+  fi
 )
 
 if [ $? -ne 0 ]; then

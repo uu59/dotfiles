@@ -41,6 +41,10 @@ function colorcheck() {
 
 # }}}
 
+local _dir_=$(cd $(dirname $0); pwd)
+if [ $+commands[percol] -ne 0 ];then
+ source "$_dir_/percol/function"
+fi
 
 # http://d.hatena.ne.jp/secondlife/20080218/1203303528
 # http://blog.m4i.jp/entry/2012/01/26/064329
