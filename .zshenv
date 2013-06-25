@@ -1,4 +1,6 @@
 #zmodload zsh/zprof && zprof
+typeset -U path cdpath fpath manpath
+
 export LS_COLORS="di=38;05;117"
 export LESS="--LONG-PROMPT --ignore-case --no-init -RF"
 export EDITOR="vim"
@@ -14,7 +16,8 @@ esac
 export GREP_OPTIONS='--binary-files=without-match --directories=skip --color=auto'
 export GISTY_DIR=$HOME/gisty
 
-export PATH="$HOME/bin:$HOME/local/bin:$HOME/.rbenv/bin:/usr/local/bin:/opt/bin:/usr/local/sbin:${PATH}"
+path=($HOME/bin(N-/) $HOME/local/bin(N-/) /usr/local/bin /opt/bin(N-/) /usr/local/sbin(N-/) ${path})
+
 #  --single-process --no-proxy-server \
 export CHROME_OPTIONS="--no-referrers --disk-cache-dir=/tmp/chromecache --disk-cache-size=102400 \
   --media-cache-size=104800 --enable-click-to-play --purge-memory-button \
@@ -30,4 +33,10 @@ if [ $+commands[rbenv] -ne 0 ]; then
   eval "$(rbenv init - --no-rehash)"
 fi
 
-export PATH="$HOME/.nodebrew/current/bin:$PATH"
+path=(
+  $HOME/.rbenv/bin(N-/)
+  $HOME/.nodebrew/current/bin(N-/)
+  $HOME/.pyenv/versions/**/bin(N-/) # use pyenv as plain self-compiled python
+  $HOME/.pyenv/bin(N-/)
+  ${path}
+)
