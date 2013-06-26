@@ -48,8 +48,9 @@ percol.import_keymap({
     "C-y" : lambda percol: percol.command.yank(),
     "C-n" : lambda percol: percol.command.select_next(),
     "C-p" : lambda percol: percol.command.select_previous(),
-    "C-v" : lambda percol: percol.command.select_next_page(),
-    "C-m" : lambda percol: percol.finish(),
+    #"C-v" : lambda percol: percol.command.select_next_page(),
+    "C-v" : lambda percol: percol.command.toggle_mark_and_next(),
+    "C-l" : lambda percol: percol.command.unmark_all(),
     "M-m" : lambda percol: percol.command.toggle_finder(FinderMultiQueryMigemo),
-    "M-r" : lambda percol: percol.command.toggle_finder(FinderMultiQueryRegex)
+    "M-r" : lambda percol: percol.command.toggle_finder(FinderMultiQueryRegex),
 })
