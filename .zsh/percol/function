@@ -1,15 +1,27 @@
 # vim: set fdm=marker ft=zsh:
 
+is-in-git-dir() {
+  (git rev-parse >/dev/null 2>&1)
+}
+
 percol-gitchoice() {
   unset hash
-  (git rev-parse >/dev/null 2>&1)
 
-  if [ $? -ne 0 ];then
-    echo "You are not in git repository.";
-  else
+  if is-in-git-dir ; then
     hash=$(git log --oneline --decorate=full --all | percol --match-method migemo | awk '{print $1}' | xargs -n1 git rev-parse)
     echo
     echo hash=$hash
+  else
+    echo "You are not in git repository.";
   fi
 }
 
+
+percol-gitview() {
+  unset hash
+
+  while :; do
+    percol-gitchoice
+    git show $hash
+  done
+}
