@@ -41,6 +41,38 @@ function colorcheck() {
 
 # }}}
 
+# -- webserver() {{{
+function webserver() {
+  local document_root="${1:-.}"
+  if [ ! -d "$document_root" ];then
+    echo "$document_root is not exists/directory" >&2
+    return 1
+  fi
+
+  local port="${2:-9090}"
+  local cmd=""
+  if which python > /dev/null 2>&1 ;then
+    # SimpleHTTPServer is better than ruby's one such as Content-Type handling
+    if (python -V 2>&1 | grep -q -F "Python 2.") ;then
+      cmd="(cd $document_root; python -m SimpleHTTPServer $port)"
+    else
+      # Python 3 has not SimpleHTTPServer
+      cmd="(cd $document_root; python -m http.server $port)"
+    fi
+  elif which ruby > /dev/null 2>&1; then
+    cmd="ruby -run -e httpd -- --port=$port $document_root"
+  fi
+
+  if [ -n "$cmd" ];then
+    echo "DocumentRoot: $(cd ${document_root}; pwd) (port: ${port})"
+    echo
+    eval "$cmd"
+  else
+    echo "can't find python/ruby" >&2
+  fi
+}
+# }}}
+
 local _dir_=$(cd $(dirname $0); pwd)
 if [ $+commands[percol] -ne 0 ];then
  source "$_dir_/percol/function"
@@ -53,4 +85,5 @@ fi
 # chpwd() {
 #     _cdd_chpwd
 # }
+
 
