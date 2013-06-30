@@ -5,7 +5,15 @@ _UPDATE_RUBY_VER=1
 prompt_uu59_setup () {
   autoload -Uz add-zsh-hook
   autoload -Uz vcs_info
+  zstyle ':vcs_info:*' max-exports 3
+  zstyle ':vcs_info:*' enable git svn hg
+  zstyle ':vcs_info:*' formats '%s:[%b]'
+  # %m is expanded to empty string if hg-mg/stgit are unavailable
+  zstyle ':vcs_info:*' actionformats '%s[%b]' '%m' '<⚑ %a>'
+  zstyle ':vcs_info:(svn|bzr):*' branchformat '%b:r%r'
+
   PROMPT2="%B%{%F{082%}%__> %b"
+
   add-zsh-hook precmd _uu59_update_prompt
   add-zsh-hook preexec _uu59_detect_change_ruby
   add-zsh-hook preexec _uu59_cleanup_hooks

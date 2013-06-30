@@ -31,6 +31,7 @@ autoload -Uz add-zsh-hook
 zle -N edit-command-line
 
 # -- vcs_info {{{
+# This is default setting. updated by each prompt theme
 autoload -Uz vcs_info
 zstyle ':vcs_info:*' max-exports 3
 zstyle ':vcs_info:*' enable git svn hg
