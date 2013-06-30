@@ -35,8 +35,8 @@ gray() {
 }
 
 (
-  _dir_=$(pwd)
   cd $(cd $(dirname $0); pwd);
+  _dir_=$(pwd)
   git submodule update --init
 
   blacklist=".git .gitignore .gitmodules setup.sh README.mkd"
