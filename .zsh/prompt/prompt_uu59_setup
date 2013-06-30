@@ -71,8 +71,11 @@ ruby_version() {
 
 # -- git_clean_or_dirty() {{{
 git_clean_or_dirty() {
-  local STATUS="$(git status --porcelain -uall 2> /dev/null)"
-  if [ -z "$STATUS" ];then
+  # https://gist.github.com/sindresorhus/3898739
+  # https://github.com/sindresorhus/pure/blob/master/prompt.zsh
+  \git rev-parse --is-inside-work-tree &>/dev/null || return
+  \git diff --quiet --ignore-submodules HEAD 2> /dev/null
+  if [ $? -eq 0 ];then
     echo ""
   else
     #all=$(echo $STATUS | wc -l )
