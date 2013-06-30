@@ -8,12 +8,14 @@ prompt_uu59_setup () {
   PROMPT2="%B%{%F{082%}%__> %b"
   add-zsh-hook precmd _uu59_update_prompt
   add-zsh-hook preexec _uu59_detect_change_ruby
+  add-zsh-hook preexec _uu59_cleanup_hooks
 }
 
 _uu59_cleanup_hooks () {
-  if ! (prompt -c | grep -F -w uu59 > /dev/null); then
+  if ! (prompt -c | grep -q -F -w uu59); then
     add-zsh-hook -d precmd _uu59_update_prompt
     add-zsh-hook -d preexec _uu59_detect_change_ruby
+    add-zsh-hook -d preexec _uu59_cleanup_hooks
     return
   fi
 }
@@ -21,14 +23,13 @@ _uu59_cleanup_hooks () {
 _uu59_detect_change_ruby () {
   # rbenv version-name is slow (0.1 sec for me)
   # so don't call it if its unnecessary
-  if (echo "rbenv rvm rm cd" | grep -w "${2%% *}" > /dev/null 2>&1) ;then
+  if (echo "rbenv rvm rm cd" | grep -q -w "${2%% *}") ;then
     # `rbenv version-name` returns incorrect version because it will be called before command completed
     _UPDATE_RUBY_VER=1
   fi
 }
 
 _uu59_update_prompt () {
-  _uu59_cleanup_hooks
 
   if [ $_UPDATE_RUBY_VER = "1" ];then
     _UPDATE_RUBY_VER=0
@@ -74,8 +75,11 @@ git_clean_or_dirty() {
   # https://gist.github.com/sindresorhus/3898739
   # https://github.com/sindresorhus/pure/blob/master/prompt.zsh
   \git rev-parse --is-inside-work-tree &>/dev/null || return
-  \git diff --quiet --ignore-submodules HEAD 2> /dev/null
-  if [ $? -eq 0 ];then
+
+  # following line can't detect untracked files (but fast on huge repository)
+  # \git diff --quiet --ignore-submodules HEAD 2> /dev/null
+
+  if [ -z "$(git status --porcelain -uall 2> /dev/null)" ];then
     echo ""
   else
     #all=$(echo $STATUS | wc -l )
