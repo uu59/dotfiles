@@ -117,9 +117,13 @@ fi
 bindkey -e
 #bindkey "^?"    backward-delete-char
 #bindkey "^H"    backward-delete-char
-#bindkey "^[[3~" delete-char
-#bindkey "^[[1~" beginning-of-line
-#bindkey "^[[4~" end-of-line
+
+# Fix Delete/Home/End key
+# http://zshwiki.org/home/zle/bindkeys
+bindkey "${terminfo[kdch1]}" delete-char
+bindkey "${terminfo[khome]}" beginning-of-line
+bindkey "${terminfo[kend]}" end-of-line
+
 bindkey "^P" history-beginning-search-backward
 bindkey "^N" history-beginning-search-forward
 bindkey "^R" history-incremental-pattern-search-backward
