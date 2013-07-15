@@ -129,7 +129,16 @@ bindkey "^N" history-beginning-search-forward
 bindkey "^R" history-incremental-pattern-search-backward
 bindkey "^G" history-incremental-pattern-search-forward
 #bindkey "^S" history-incremental-search-forward
-bindkey '\C-x\C-e' edit-command-line
+
+# quickly launch for edit-command-line
+my-edit-command-line () {
+  local EDITOR="${GIT_EDITOR:-${EDITOR:-vim}}"
+  edit-command-line
+}
+zle -N my-edit-command-line
+bindkey '^[\C-e' my-edit-command-line # ESC C-e
+bindkey '^[e' my-edit-command-line # ESC e
+
 bindkey '^V' vi-quoted-insert
 
 # vimぽいC-w
