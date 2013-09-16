@@ -156,9 +156,9 @@ trap "source ~/.zshrc && rehash" USR1
 
 # GNU screen {{{
 
-if [ -n "${STY}" ] ; then # screen
+if [ -n "${STY}" -o -n "$TMUX" ] ; then # screen
   screen-title-set () {
-    [ -n "${STY}" ] && [ $# -gt 0 ] && echo -ne '\ek'${1%% *}'\e\\'
+    [ -n "${STY}" -o -n "$TMUX" ] && [ $# -gt 0 ] && echo -ne '\ek'${1%% *}'\e\\'
   }
   add-zsh-hook preexec screen-title-set
 fi
