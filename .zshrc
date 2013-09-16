@@ -156,11 +156,19 @@ trap "source ~/.zshrc && rehash" USR1
 
 # GNU screen {{{
 
-if [ -n "${STY}" -o -n "$TMUX" ] ; then # screen
+if [ -n "${STY}" ] ; then # screen
   screen-title-set () {
-    [ -n "${STY}" -o -n "$TMUX" ] && [ $# -gt 0 ] && echo -ne '\ek'${1%% *}'\e\\'
+    [ -n "${STY}" ] && [ $# -gt 0 ] && echo -ne '\ek'${1%% *}'\e\\'
   }
   add-zsh-hook preexec screen-title-set
+fi
+
+if [ -n "$TMUX_PANE" ] ;then
+  tmux-pane-title-set () {
+    [ -n "${TMUX_PANE}" ] && [ $# -gt 0 ] && printf '\033]2;'${1%% *}'\033\\'
+  }
+  add-zsh-hook preexec tmux-pane-title-set
+  tmux-pane-title-set "zsh"
 fi
 # }}}
 
