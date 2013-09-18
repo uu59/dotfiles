@@ -174,7 +174,7 @@ if [ -n "$TMUX_PANE" ] ;then
 fi
 
 if [ -n "$TMUX" ]; then
-  printf '\033k\033\\'
+  printf '\033k\033\\' # initialize
 fi
 # }}}
 
