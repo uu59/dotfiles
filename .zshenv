@@ -40,3 +40,7 @@ path=(
   $HOME/.pyenv/bin(N-/)
   ${path}
 )
+
+if [ $+commands[nodebrew] -ne 0 ]; then
+  export NODE_PATH=$HOME/.nodebrew/current/lib/node_modules
+fi
