@@ -2,7 +2,7 @@
 typeset -U path cdpath fpath manpath
 
 export LS_COLORS="di=38;05;117"
-export LESS="--LONG-PROMPT --ignore-case --no-init -RF"
+export LESS="--LONG-PROMPT --ignore-case --no-init -RF -i"
 export EDITOR="vim"
 export GIT_EDITOR="vim -u $HOME/.vimrc.basic"
 case ${OSTYPE} in

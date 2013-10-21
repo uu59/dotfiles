@@ -111,6 +111,14 @@ elif which putclip >/dev/null 2>&1 ; then
   alias -g C='| putclip'
 fi
 
+# http://unix.stackexchange.com/a/147
+export LESS_TERMCAP_mb=$'\E[1;38;05;183m' # blink start
+export LESS_TERMCAP_md=$'\E[1;38;05;183m' # bold start
+export LESS_TERMCAP_me=$'\E[0m' # bold/underline/blink end
+export LESS_TERMCAP_us=$'\E[4;38;05;15m' # underline start
+export LESS_TERMCAP_ue=$'\E[0m' # underline end
+export LESS_TERMCAP_mr=$'\E[1;38;05;11m' # underline end
+
 # }}}
 
 # bindkey {{{
