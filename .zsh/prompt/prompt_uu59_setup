@@ -68,7 +68,7 @@ ruby_version() {
     version=$(rbenv version-name)
   elif [ $+commands[rvm-prompt] -ne 0 ]; then
     version=$(rvm-prompt)
-  elif [ $+commands[ruby] -ne 0] ;then
+  elif [ $+commands[ruby] -ne 0 ] ;then
     version=$(ruby -e 'print %Q!#{RUBY_VERSION}-p#{RUBY_PATCHLEVEL}!')
   fi
 
