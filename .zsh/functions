@@ -25,7 +25,7 @@ function colorcheck() {
   if [ $FG = 1 ];then
     echo '\\033[0;38;05;XXXm Text \\033[0m'
     for color in `seq -f '%03g' 0 255`; do
-      echo -n "\033[38;05;${color}m${color}\033[0m "
+      printf "\033[38;05;${color}m${color}\033[0m "
     done
     echo;
   fi
@@ -33,7 +33,7 @@ function colorcheck() {
   if [ $BG = 1 ];then
     echo '\\033[48;05;XXXm Text \\033[0m'
     for color in `seq -f '%03g' 0 255`; do
-      echo -n "\033[48;05;${color}m${color}\033[0m  "
+      printf "\033[48;05;${color}m${color}\033[0m  "
     done
     echo;
   fi
