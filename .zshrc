@@ -9,8 +9,8 @@ if [[ -d "$_ZSH_DIRECTORY/zsh-completions/src" ]]; then
   # set $fpath before compinit
   fpath=($fpath "$_ZSH_DIRECTORY/zsh-completions/src")
 fi
+fpath=($fpath "$HOME/src/git/contrib/completion")
 autoload -Uz compinit
-compinit -C
 
 zstyle ':completion:*:sudo:*' command-path /usr/local/sbin /usr/local/bin /usr/sbin /usr/bin /sbin /bin
 zstyle ':completion:*' verbose no
@@ -33,6 +33,8 @@ zle -N edit-command-line
 # -- vcs_info {{{
 # This is default setting. updated by each prompt theme
 autoload -Uz vcs_info
+compinit -C
+
 zstyle ':vcs_info:*' max-exports 3
 zstyle ':vcs_info:*' enable git svn hg
 
@@ -187,6 +189,7 @@ fi
 if [ -n "$TMUX" ]; then
   printf '\033k\033\\' # initialize
 fi
+
 # }}}
 
 if [ -f "$HOME/.zsh/functions" ];then
