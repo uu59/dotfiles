@@ -52,6 +52,7 @@ fi
 
 zle_highlight=(isearch:fg="228",underline)
 
+setopt bsd_echo
 setopt prompt_subst # PROMPTの中身を展開
 setopt extended_history # 履歴ファイルに時刻を記録
 setopt always_last_prompt   # 無駄なスクロールを避ける
