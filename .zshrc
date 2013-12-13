@@ -64,9 +64,9 @@ setopt share_history # シェルのプロセスごとに履歴を共有
 setopt auto_menu # 補完候補が複数あるときに自動的に一覧表示する
 setopt magic_equal_subst     # コマンドラインの引数で --prefix=/usr などの = 以降でも補完できる
 
-# grep foo ./**/*.rb みたいなの使わない。git show HEAD^とかrake foo[bar]とかは使う。よってglob要らない。
-setopt NO_glob
-setopt NO_extended_glob
+setopt extended_glob
+setopt glob
+setopt nullglob # git show HEAD^とかrake foo[bar]とか使いたい
 
 setopt transient_rprompt # http://www.machu.jp/diary/20130114.html
 
