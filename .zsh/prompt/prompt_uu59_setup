@@ -26,7 +26,8 @@ _uu59_cleanup_hooks () {
 
 _uu59_update_prompt () {
   # ruby version
-  ruby_path=$(readlink -e $(command -v ruby))
+  local ruby_path=$(readlink -e $(command -v ruby))
+  local ruby_ver
   zstyle -s ':ruby:version' "$ruby_path" ruby_ver
   if [ -n "$ruby_path" ];then
     if [ -z "$ruby_ver" ];then
