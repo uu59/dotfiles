@@ -29,6 +29,7 @@ _uu59_update_prompt () {
   local ruby_path=$(readlink -e $(command -v ruby))
   local ruby_ver
   zstyle -s ':ruby:version' "$ruby_path" ruby_ver
+  : ${ruby_ver:="$(echo $ruby_path | grep -o -E '[0-9]\.[0-9]\.[0-9]-p[0-9]+')"}
   if [ -n "$ruby_path" ];then
     if [ -z "$ruby_ver" ];then
       ruby_ver="$(current_ruby_version)"
