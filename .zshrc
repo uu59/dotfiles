@@ -45,6 +45,7 @@ zstyle ':vcs_info:(svn|bzr):*' branchformat '%b:r%r'
 
 # }}}
 
+
 local GIT_COMPLETION_FILE="${GIT_COMPLETION_FILE:-${HOME}/src/git/contrib/completion/git-completion.sh}"
 if [ -n "$GIT_COMPLETION_FILE" -a -f "$GIT_COMPLETION_FILE" ];then
   zstyle ':completion:*:*:git:*' script $GIT_COMPLETION_FILE
@@ -163,6 +164,42 @@ tcsh-backward-delete-word () {
 zle -N tcsh-backward-delete-word
 bindkey '^W' tcsh-backward-delete-word
 
+# }}}
+
+# -- plugins {{{
+if [ -f "$_ZSH_DIRECTORY/auto-fu.zsh/auto-fu.zsh" ]; then
+  # source "$_ZSH_DIRECTORY/auto-fu.zsh/auto-fu.zsh"
+  # zle-line-init () {auto-fu-init;}; zle -N zle-line-init
+  # zstyle ':completion:*' completer _oldlist _complete
+fi
+
+() {
+  local autosug="$_ZSH_DIRECTORY/zsh-autosuggestions/autosuggestions.zsh"
+  if [ -f "$autosug" ]; then
+    source $autosug
+    AUTOSUGGESTION_HIGHLIGHT_COLOR="fg=059,bg=016"
+    zle-line-init() {
+        zle autosuggest-start
+    }
+    zle -N zle-line-init
+  fi
+}
+
+() {
+  local zce="$_ZSH_DIRECTORY/zce.zsh/zce.zsh"
+    if [ -f "$zce" ]; then
+    . $zce
+    # エラーになってしまうのでコンパイルしない
+    # autoload -w "$compile_to/zce"
+    # zle -N zce
+    bindkey '^[j' zce
+    bindkey '^[\C-j' zce
+    () {
+      setopt localoptions braceccl
+      zstyle ':zce:*' keys ${(j..)$(print fjdk{a-z})}
+    }
+  fi
+}
 # }}}
 
 # http://www.reddit.com/r/commandline/comments/12g76v/how_to_automatically_source_zshrc_in_all_open/
