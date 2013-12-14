@@ -18,6 +18,7 @@ zstyle ':completion:*' completer _complete _ignored # default: _complete _ignore
 zstyle ':completion:*' use-cache on
 zstyle ':completion:*' cache-path ~/.zsh/cache
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 
 
 fpath=($fpath "$_ZSH_DIRECTORY/prompt")
@@ -73,14 +74,14 @@ setopt nullglob # git show HEAD^とかrake foo[bar]とか使いたい
 setopt transient_rprompt # http://www.machu.jp/diary/20130114.html
 
 # 補完するかの質問は画面を超える時にのみに行う｡
-LISTMAX=0
+local LISTMAX=0
 
-HISTFILE=~/.zsh-history
-HISTSIZE=100000
-SAVEHIST=100000
+local HISTFILE=~/.zsh-history
+local HISTSIZE=100000
+local SAVEHIST=100000
 
 # http://kimoto.hatenablog.com/entry/2012/08/14/112500
-export REPORTTIME=1
+local REPORTTIME=1
 # }}}
 
 # platform {{{
@@ -174,15 +175,19 @@ if [ -f "$_ZSH_DIRECTORY/auto-fu.zsh/auto-fu.zsh" ]; then
 fi
 
 () {
-  local autosug="$_ZSH_DIRECTORY/zsh-autosuggestions/autosuggestions.zsh"
-  if [ -f "$autosug" ]; then
-    source $autosug
-    AUTOSUGGESTION_HIGHLIGHT_COLOR="fg=059,bg=016"
-    zle-line-init() {
-        zle autosuggest-start
-    }
-    zle -N zle-line-init
-  fi
+  . $_ZSH_DIRECTORY/incr-0.2-custom.zsh
+}
+
+() {
+  # local autosug="$_ZSH_DIRECTORY/zsh-autosuggestions/autosuggestions.zsh"
+  # if [ -f "$autosug" ]; then
+  #   source $autosug
+  #   AUTOSUGGESTION_HIGHLIGHT_COLOR="fg=059,bg=016"
+  #   zle-line-init() {
+  #       zle autosuggest-start
+  #   }
+  #   zle -N zle-line-init
+  # fi
 }
 
 () {
