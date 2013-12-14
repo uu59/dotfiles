@@ -1,7 +1,5 @@
 # vim: set ft=zsh:
 
-_UPDATE_RUBY_VER=1
-
 prompt_uu59_setup () {
   autoload -Uz add-zsh-hook
   autoload -Uz vcs_info
@@ -15,34 +13,32 @@ prompt_uu59_setup () {
   PROMPT2="%B%{%F{082%}%__> %b"
 
   add-zsh-hook precmd _uu59_update_prompt
-  add-zsh-hook preexec _uu59_detect_change_ruby
-  add-zsh-hook preexec _uu59_cleanup_hooks
+  add-zsh-hook precmd _uu59_cleanup_hooks
+  _uu59_update_prompt
 }
 
 _uu59_cleanup_hooks () {
-  if ! (prompt -c | grep -q -F -w uu59); then
+  if [ "$prompt_theme" != "uu59" ];then
     add-zsh-hook -d precmd _uu59_update_prompt
-    add-zsh-hook -d preexec _uu59_detect_change_ruby
-    add-zsh-hook -d preexec _uu59_cleanup_hooks
-    return
-  fi
-}
-
-_uu59_detect_change_ruby () {
-  # rbenv version-name is slow (0.1 sec for me)
-  # so don't call it if its unnecessary
-  if (echo "rbenv rvm rm cd" | grep -q -w "${2%% *}") ;then
-    # `rbenv version-name` returns incorrect version because it will be called before command completed
-    _UPDATE_RUBY_VER=1
+    add-zsh-hook -d precmd _uu59_cleanup_hooks
   fi
 }
 
 _uu59_update_prompt () {
-
-  if [ $_UPDATE_RUBY_VER = "1" ];then
-    _UPDATE_RUBY_VER=0
-    PROMPT="%n%{%F{${MY_COLOR_PROMPT_HOST:-207}%}@%m%f:%~$(ruby_version)%(!.#.$) "
+  # ruby version
+  ruby_path=$(readlink -e $(command -v ruby))
+  zstyle -s ':ruby:version' "$ruby_path" ruby_ver
+  if [ -n "$ruby_path" ];then
+    if [ -z "$ruby_ver" ];then
+      ruby_ver="$(current_ruby_version)"
+      zstyle ':ruby:version' "$ruby_path" "$ruby_ver"
+    fi
   fi
+  if [ -n "$ruby_ver" ];then
+    ruby_ver=" %{%F{248%}(ruby-$ruby_ver)%f "
+  fi
+
+  PROMPT="%n%{%F{${MY_COLOR_PROMPT_HOST:-207}%}@%m%f:%~${ruby_ver}%(!.#.$) "
 
   LANG=C vcs_info
   if [ -z "$vcs_info_msg_0_" ];then
@@ -61,9 +57,8 @@ _uu59_update_prompt () {
   RPROMPT=$prompt
 }
 
-# -- ruby_version() {{{
-ruby_version() {
-  local version=""
+current_ruby_version() {
+  local version
   if [ $+commands[rbenv] -ne 0 ];then
     version=$(rbenv version-name)
   elif [ $+commands[rvm-prompt] -ne 0 ]; then
@@ -71,12 +66,8 @@ ruby_version() {
   elif [ $+commands[ruby] -ne 0 ] ;then
     version=$(ruby -e 'print %Q!#{RUBY_VERSION}-p#{RUBY_PATCHLEVEL}!')
   fi
-
-  if [ -n "$version" ];then
-    echo " %{%F{248%}(ruby-$version)%f "
-  fi
+  echo $version
 }
-# }}}
 
 # -- git_clean_or_dirty() {{{
 git_clean_or_dirty() {
