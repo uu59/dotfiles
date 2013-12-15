@@ -52,7 +52,7 @@ setopt magic_equal_subst     # コマンドラインの引数で --prefix=/usr �
 
 setopt extended_glob
 setopt glob
-setopt nullglob # git show HEAD^とかrake foo[bar]とか使いたい
+setopt no_nomatch # git show HEAD^とかrake foo[bar]とか使いたい
 
 setopt transient_rprompt # http://www.machu.jp/diary/20130114.html
 
