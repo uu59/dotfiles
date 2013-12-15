@@ -14,7 +14,6 @@ prompt_uu59_setup () {
 
   add-zsh-hook precmd _uu59_update_prompt
   add-zsh-hook precmd _uu59_cleanup_hooks
-  _uu59_update_prompt
 }
 
 _uu59_cleanup_hooks () {
@@ -25,22 +24,26 @@ _uu59_cleanup_hooks () {
 }
 
 _uu59_update_prompt () {
+  local left_prompt="%n%{%F{${MY_COLOR_PROMPT_HOST:-207}%}@%m%f:%~"
   # ruby version
-  local ruby_path=$(readlink -e $(command -v ruby))
-  local ruby_ver
-  zstyle -s ':ruby:version' "$ruby_path" ruby_ver
-  : ${ruby_ver:="$(echo $ruby_path | grep -o -E '[0-9]\.[0-9]\.[0-9]-p[0-9]+')"}
-  if [ -n "$ruby_path" ];then
-    if [ -z "$ruby_ver" ];then
-      ruby_ver="$(current_ruby_version)"
-      zstyle ':ruby:version' "$ruby_path" "$ruby_ver"
+  if [ $+commands[ruby] -eq 1 ]; then
+    local ruby_path=$(readlink -e $(command -v ruby))
+    local ruby_ver
+    zstyle -s ':ruby:version' "$ruby_path" ruby_ver
+    : ${ruby_ver:="$(echo $ruby_path | grep -o -E '[0-9]\.[0-9]\.[0-9]-p[0-9]+')"}
+    if [ -n "$ruby_path" ];then
+      if [ -z "$ruby_ver" ];then
+        ruby_ver="$(current_ruby_version)"
+        zstyle ':ruby:version' "$ruby_path" "$ruby_ver"
+      fi
+    fi
+    if [ -n "$ruby_ver" ];then
+      left_prompt+=" %{%F{248%}(ruby-$ruby_ver)%f "
     fi
   fi
-  if [ -n "$ruby_ver" ];then
-    ruby_ver=" %{%F{248%}(ruby-$ruby_ver)%f "
-  fi
 
-  PROMPT="%n%{%F{${MY_COLOR_PROMPT_HOST:-207}%}@%m%f:%~${ruby_ver}%(!.#.$) "
+  left_prompt+="%(!.#.$) "
+  PROMPT="$left_prompt"
 
   LANG=C vcs_info
   if [ -z "$vcs_info_msg_0_" ];then
@@ -51,12 +54,12 @@ _uu59_update_prompt () {
   # 0: main
   # 1: misc
   # 2: rebase/merge
-  local prompt="%{%F{${MY_COLOR_PROMPT_GIT_0:-190}%}$(git_clean_or_dirty)%f"
-  prompt+="%F{${MY_COLOR_PROMPT_GIT_0:-190}%}$vcs_info_msg_0_%f"
+  local right_prompt="%{%F{${MY_COLOR_PROMPT_GIT_0:-190}%}$(git_clean_or_dirty)%f"
+  right_prompt+="%F{${MY_COLOR_PROMPT_GIT_0:-190}%}$vcs_info_msg_0_%f"
   if [ -n "$vcs_info_msg_2_" ]; then
-    prompt+=" %F{${MY_COLOR_PROMPT_GIT_2:-189}%}$vcs_info_msg_2_%f"
+    right_prompt+=" %F{${MY_COLOR_PROMPT_GIT_2:-189}%}$vcs_info_msg_2_%f"
   fi
-  RPROMPT=$prompt
+  RPROMPT=$right_prompt
 }
 
 current_ruby_version() {
