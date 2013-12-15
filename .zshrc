@@ -248,17 +248,18 @@ compdef -d rake # 重い
 
 _rake() { # {{{
   local dir=`pwd -P`
-  local cache="$_ZSH_DIRECTORY/cache/_rake${dir}"
+  local cache="${ZDOTDIR:-$HOME/.zsh}/cache/_rake${dir}"
   local cache_lock="$cache.lock"
   if [ -f "$cache" ];then
     compadd `cat $cache`
     # TODO: `stat` on OSX
     local newest=$(
+      setopt glob
       for file in Gemfile Rakefile lib/tasks/**/*.rake; do
-        stat --format '%Y' "$file"
+        stat --format '%Y' "$file" 2>/dev/null
       done | sort -n | tail -1
     )
-    if [ $(stat --format '%Y' "$cache") -gt $newest ];then
+    if [ $(stat --format '%Y' "$cache") -gt ${newest:-0} ];then
       return
     fi
   fi
@@ -273,18 +274,19 @@ _rake() { # {{{
     cmd=("$(command -v bundle)" exec rake)
   fi
   cmd=($cmd -s -P)
-  set +m # `sleep 3 &`の終了メッセージとかを出さない
   (
-    exec 2>/dev/null
-    echo $$ > $cache_lock
-    $cmd  | grep -F rake | grep -v -F "/" | awk '{print $2}' > $cache
-    if [ $pipestatus[1] -ne 0 ];then
-      unsetopt noclobber # 上書き許可
-      : > $cache
-    fi
-    compadd `cat $cache`
-    rm -f $cache_lock
-  ) & 2>/dev/null 1>&2
+    exec 1>&2 2>/dev/null
+    set +m # `sleep 3 &`の終了メッセージとかを出さない
+    unsetopt noclobber # 上書き許可
+    (
+      echo $$ > $cache_lock
+      $cmd  | grep -F rake | grep -v -F "/" | awk '{print $2}' > $cache
+      if [ $pipestatus[1] -ne 0 ];then
+        : > $cache
+      fi
+      rm -f $cache_lock
+    ) &
+  )
 } #}}}
 compdef _rake rake
 
