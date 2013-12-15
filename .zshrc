@@ -244,6 +244,42 @@ zstyle ':completion:*' cache-path ~/.zsh/cache
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 
+compdef -d rake # 重い
+
+_rake() { # {{{
+  local dir=`pwd -P`
+  local cache="$_ZSH_DIRECTORY/cache/_rake${dir}"
+  local cache_lock="$cache.lock"
+  if [ -f "$cache" ];then
+    compadd `cat $cache`
+    return
+  fi
+  if [ -f "$cache_lock" ];then # 2重生成処理防止
+    return
+  fi
+
+  mkdir -p $(dirname $cache)
+  local -a cmd # local -a tmp=(..) はエラー
+  cmd=(rake)
+  if [ -f Gemfile ];then
+    cmd=("$(command -v bundle)" exec rake)
+  fi
+  cmd=($cmd -s -P)
+  set +m # `sleep 3 &`の終了メッセージとかを出さない
+  (
+    exec 2>/dev/null
+    echo $$ > $cache_lock
+    $cmd  | grep -F rake | grep -v -F "/" | awk '{print $2}' > $cache
+    if [ $pipestatus[1] -ne 0 ];then
+      unsetopt noclobber # 上書き許可
+      : > $cache
+    fi
+    compadd `cat $cache`
+    rm -f $cache_lock
+  ) & 2>/dev/null 1>&2
+} #}}}
+compdef _rake rake
+
 # }}}
 
 
