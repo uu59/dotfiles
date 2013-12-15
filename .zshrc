@@ -1,44 +1,31 @@
 # vim: set fdm=marker: 
 
 export TERM=xterm-256color
-
-# autoload, zle, etc {{{
-
 local _ZSH_DIRECTORY="$HOME/.zsh"
-if [[ -d "$_ZSH_DIRECTORY/zsh-completions/src" ]]; then
-  # set $fpath before compinit
-  fpath=($fpath "$_ZSH_DIRECTORY/zsh-completions/src")
+
+autoload -Uz add-zsh-hook
+autoload -Uz edit-command-line # C-x C-e
+zle -N edit-command-line
+
+if [ -f "$HOME/.zsh/functions" ];then
+  source $HOME/.zsh/functions
 fi
-fpath=($fpath "$HOME/src/git/contrib/completion")
-autoload -Uz compinit
 
-zstyle ':completion:*:sudo:*' command-path /usr/local/sbin /usr/local/bin /usr/sbin /usr/bin /sbin /bin
-zstyle ':completion:*' verbose no
-zstyle ':completion:*' completer _complete _ignored # default: _complete _ignored
-zstyle ':completion:*' use-cache on
-zstyle ':completion:*' cache-path ~/.zsh/cache
-zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
-zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
-
+# prompt {{{
 
 fpath=($fpath "$_ZSH_DIRECTORY/prompt")
 autoload -Uz promptinit
 promptinit
 prompt "${ZSH_THEME:-"uu59"}"
 
-autoload -Uz edit-command-line # C-x C-e
-autoload -Uz add-zsh-hook
+# }}}
 
-zle -N edit-command-line
-
-# -- vcs_info {{{
+# vcs_info {{{
 # This is default setting. updated by each prompt theme
 autoload -Uz vcs_info
-compinit -C
 
 zstyle ':vcs_info:*' max-exports 3
 zstyle ':vcs_info:*' enable git svn hg
-
 zstyle ':vcs_info:*' formats '%s:[%b]'
 # %m is expanded to empty string if hg-mg/stgit are unavailable
 zstyle ':vcs_info:*' actionformats '%s[%b]' '%m' '<⚑ %a>'
@@ -46,11 +33,7 @@ zstyle ':vcs_info:(svn|bzr):*' branchformat '%b:r%r'
 
 # }}}
 
-
-local GIT_COMPLETION_FILE="${GIT_COMPLETION_FILE:-${HOME}/src/git/contrib/completion/git-completion.sh}"
-if [ -n "$GIT_COMPLETION_FILE" -a -f "$GIT_COMPLETION_FILE" ];then
-  zstyle ':completion:*:*:git:*' script $GIT_COMPLETION_FILE
-fi
+# variables {{{
 
 zle_highlight=(isearch:fg="228",underline)
 
@@ -82,6 +65,14 @@ local SAVEHIST=100000
 
 # http://kimoto.hatenablog.com/entry/2012/08/14/112500
 local REPORTTIME=1
+
+# http://unix.stackexchange.com/a/147
+export LESS_TERMCAP_mb=$'\E[1;38;05;183m' # blink start
+export LESS_TERMCAP_md=$'\E[1;38;05;183m' # bold start
+export LESS_TERMCAP_me=$'\E[0m' # bold/underline/blink end
+export LESS_TERMCAP_us=$'\E[4;38;05;15m' # underline start
+export LESS_TERMCAP_ue=$'\E[0m' # underline end
+export LESS_TERMCAP_mr=$'\E[1;38;05;11m' # underline end
 # }}}
 
 # platform {{{
@@ -99,7 +90,7 @@ case "${OSTYPE}" in
 esac
 # }}}
 
-# variables & alias {{{
+# alias {{{
 
 alias tmux="tmux -2"
 alias df="LANG=C df"
@@ -118,14 +109,6 @@ elif which putclip >/dev/null 2>&1 ; then
   # Cygwin
   alias -g C='| putclip'
 fi
-
-# http://unix.stackexchange.com/a/147
-export LESS_TERMCAP_mb=$'\E[1;38;05;183m' # blink start
-export LESS_TERMCAP_md=$'\E[1;38;05;183m' # bold start
-export LESS_TERMCAP_me=$'\E[0m' # bold/underline/blink end
-export LESS_TERMCAP_us=$'\E[4;38;05;15m' # underline start
-export LESS_TERMCAP_ue=$'\E[0m' # underline end
-export LESS_TERMCAP_mr=$'\E[1;38;05;11m' # underline end
 
 # }}}
 
@@ -167,18 +150,21 @@ bindkey '^W' tcsh-backward-delete-word
 
 # }}}
 
-# -- plugins {{{
-if [ -f "$_ZSH_DIRECTORY/auto-fu.zsh/auto-fu.zsh" ]; then
-  # source "$_ZSH_DIRECTORY/auto-fu.zsh/auto-fu.zsh"
-  # zle-line-init () {auto-fu-init;}; zle -N zle-line-init
-  # zstyle ':completion:*' completer _oldlist _complete
-fi
+# plugins {{{
+() { # auto-fu {{{
+  local src="$_ZSH_DIRECTORY/auto-fu.zsh/auto-fu.zsh" 
+  if [ -f "$src" ]; then
+    # source "$_ZSH_DIRECTORY/auto-fu.zsh/auto-fu.zsh"
+    # zle-line-init () {auto-fu-init;}; zle -N zle-line-init
+    # zstyle ':completion:*' completer _oldlist _complete
+  fi
+} # }}}
 
-() {
+() { # incr-0.2 {{{
   . $_ZSH_DIRECTORY/incr-0.2-custom.zsh
-}
+} # }}}
 
-() {
+() { # autosuggestions {{{
   # local autosug="$_ZSH_DIRECTORY/zsh-autosuggestions/autosuggestions.zsh"
   # if [ -f "$autosug" ]; then
   #   source $autosug
@@ -188,9 +174,9 @@ fi
   #   }
   #   zle -N zle-line-init
   # fi
-}
+} # }}}
 
-() {
+() { # zce {{{
   local zce="$_ZSH_DIRECTORY/zce.zsh/zce.zsh"
     if [ -f "$zce" ]; then
     . $zce
@@ -203,11 +189,10 @@ fi
       zstyle ':zce:*' keys ${(j..)$(print fjdk{a-z})}
     }
   fi
-}
+} # }}}
 # }}}
 
-# http://www.reddit.com/r/commandline/comments/12g76v/how_to_automatically_source_zshrc_in_all_open/
-trap "source ~/.zshrc && rehash" USR1
+# terminal multiplexer {{{
 
 # GNU screen {{{
 
@@ -234,10 +219,38 @@ fi
 
 # }}}
 
-if [ -f "$HOME/.zsh/functions" ];then
-  source $HOME/.zsh/functions
-fi
+# }}}
 
-if (which zprof > /dev/null 2>&1) ;then
+# completion {{{
+
+# set $fpath before compinit
+fpath=(
+  $fpath
+  "$_ZSH_DIRECTORY/zsh-completions/src"(N-/)
+  "$HOME/src/git/contrib/completion"(N-/)
+)
+local GIT_COMPLETION_FILE="${GIT_COMPLETION_FILE:-${HOME}/src/git/contrib/completion/git-completion.sh}"
+if [ -n "$GIT_COMPLETION_FILE" -a -f "$GIT_COMPLETION_FILE" ];then
+  zstyle ':completion:*:*:git:*' script $GIT_COMPLETION_FILE
+fi
+autoload -Uz compinit
+compinit -C
+
+zstyle ':completion:*:sudo:*' command-path /usr/local/sbin /usr/local/bin /usr/sbin /usr/bin /sbin /bin
+zstyle ':completion:*' verbose no
+zstyle ':completion:*' completer _complete _ignored # default: _complete _ignored
+zstyle ':completion:*' use-cache yes
+zstyle ':completion:*' cache-path ~/.zsh/cache
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
+
+# }}}
+
+
+# http://www.reddit.com/r/commandline/comments/12g76v/how_to_automatically_source_zshrc_in_all_open/
+trap "source ~/.zshrc && rehash" USR1
+
+# debug for speed
+if (command -v zprof > /dev/null 2>&1) ;then
   zprof | less
 fi
