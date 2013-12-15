@@ -252,7 +252,15 @@ _rake() { # {{{
   local cache_lock="$cache.lock"
   if [ -f "$cache" ];then
     compadd `cat $cache`
-    return
+    # TODO: `stat` on OSX
+    local newest=$(
+      for file in Gemfile Rakefile lib/tasks/**/*.rake; do
+        stat --format '%Y' "$file"
+      done | sort -n | tail -1
+    )
+    if [ $(stat --format '%Y' "$cache") -gt $newest ];then
+      return
+    fi
   fi
   if [ -f "$cache_lock" ];then # 2重生成処理防止
     return
