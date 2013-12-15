@@ -8,7 +8,7 @@
 # http://wiki.fdiary.net/zsh/?ColoredCompletion
 zstyle -e ':completion:*:default' list-colors 'reply=("${PREFIX:+=(#bi)($PREFIX:t)(?)*==38;5;158=0}:${(s.:.)LS_COLORS}")'
 
-local LISTMAX=999999
+export LISTMAX=999999
 
 limit_predict () {
   echo 32
