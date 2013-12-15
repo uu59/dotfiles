@@ -197,8 +197,7 @@ fi
     # エラーになってしまうのでコンパイルしない
     # autoload -w "$compile_to/zce"
     # zle -N zce
-    bindkey '^[j' zce
-    bindkey '^[\C-j' zce
+    bindkey '^T' zce
     () {
       setopt localoptions braceccl
       zstyle ':zce:*' keys ${(j..)$(print fjdk{a-z})}
