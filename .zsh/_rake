@@ -1,0 +1,125 @@
+# vim: set ft=zsh:
+
+# https://github.com/uu59/dotfiles
+
+compdef -d rake
+
+_rake() {
+  local dir=`pwd -P`
+  local cache="${ZDOTDIR:-$HOME/.zsh}/cache/_rake${dir}"
+  local cache_lock="$cache.lock"
+  case $CURRENT in
+    2)
+      __rake_subcommands "$cache" "$cache_lock"
+      return 1
+      ;;
+    *)
+      local -a env
+      case "$words[$CURRENT - 1]" in
+        spec)
+          env=(SPEC SPEC_OPTS)
+          ;;
+        db:create|db:drop)
+          env=(DATABASE_URL)
+          ;;
+        db:migrate)
+          env=(VERSION SCOPE)
+          ;;
+        db:migrate:redo|db:rollback|db:forward)
+          env=(STEP)
+          ;;
+        db:migrate:up|db:migrate:down)
+          env=(VERSION)
+          ;;
+        db:reset)
+          env=(DATABASE_URL VERSION SCOPE)
+          ;;
+        db:fixtures:load)
+          env=(FIXTURES_PATH FIXTURES_DIR FIXTURES)
+          ;;
+        db:fixtures:identify)
+          env=(LABEL ID FIXTURES_PATH)
+          ;;
+        db:schema)
+          env=(SCHEMA)
+          ;;
+        notes:custom)
+          env=(ANNOTATION)
+          ;;
+        routes)
+          env=(CONTROLLER)
+          ;;
+        rails:template)
+          env=(TEMPLATE)
+          ;;
+        log:clear)
+          env=(LOGS)
+          ;;
+        time:zones:local)
+          env=(OFFSET)
+          ;;
+
+      esac
+      env=(RAILS_ENV VERBOSE $env)
+      compadd $env
+      return 1
+  esac
+}
+
+
+__rake_subcommands () {
+  local cache=$1
+  local cache_lock=$2
+  local -a stat
+  case "$OSTYPE" in
+    linux*)
+      stat=(stat --format "%Y")
+      ;;
+    darwin*)
+      stat=(stat -f "%m")
+      ;;
+  esac
+
+  if [ -f "$cache" ];then
+    compadd `cat $cache`
+    local newest=$(
+      setopt glob
+      for file in Gemfile Rakefile lib/tasks/**/*.rake; do
+        $stat "$file" 2>/dev/null
+      done | sort -n | tail -1
+    )
+    if [ -z "$newest" ]; then
+      return
+    fi
+    if [ $($stat "$cache") -gt ${newest:-0} ];then
+      return
+    fi
+  fi
+  if [ -f "$cache_lock" ];then # 2重生成処理防止
+    return
+  fi
+
+  mkdir -p $(dirname $cache)
+  local -a cmd # local -a tmp=(..) はエラー
+  cmd=(rake)
+  if [ -f Gemfile ];then
+    cmd=("$(command -v bundle)" exec rake)
+  fi
+  cmd=($cmd -s -P)
+  (
+    exec 1>&2 2>/dev/null
+    set +m # `sleep 3 &`の終了メッセージとかを出さない
+    unsetopt noclobber # 上書き許可
+    (
+      echo $$ > $cache_lock
+      $cmd  | grep -F rake | grep -v -F "/" | awk '{print $2}' > $cache
+      if [ $pipestatus[1] -ne 0 ];then
+        : > $cache
+      fi
+      rm -f $cache_lock
+    ) &
+  )
+}
+
+compdef _rake rake
+
