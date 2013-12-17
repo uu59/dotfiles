@@ -14,6 +14,10 @@ _rake() {
       return 1
       ;;
     *)
+      # rake db:drop db:create etc:task ... 
+      __rake_subcommands "$cache" "$cache_lock"
+
+      # rake spec SPEC=, rake db:migrate VERSION=, etc
       local -a env
       case "$words[$CURRENT - 1]" in
         spec)
