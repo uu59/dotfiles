@@ -257,6 +257,11 @@ zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 # }}}
 
 
+# Don't use slow completion
+for slowcomp in gem npm; do
+  compdef -d $slowcomp
+done
+
 # http://www.reddit.com/r/commandline/comments/12g76v/how_to_automatically_source_zshrc_in_all_open/
 trap "source ~/.zshrc && rehash" USR1
 
