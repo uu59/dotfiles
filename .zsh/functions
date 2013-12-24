@@ -140,3 +140,6 @@ __is_git_dirty() {
   fi
 }
 
+__git_upstream() {
+  git rev-parse --abbrev-ref @{u} 2>/dev/null
+}

@@ -38,7 +38,9 @@ _test2_update_prompt () {
   # 1: misc
   # 2: rebase/merge
   if [ -n "$vcs_info_msg_0_" ];then
-    left_prompt+="%F{255%}${vcs_info_msg_0_}%f%F{225%} $(__is_git_dirty && printf "⚶")%f"
+    local upstream=$(__git_upstream)
+    [[ -n $upstream ]] && upstream=" -> $upstream"
+    left_prompt+="%F{225%}$(__is_git_dirty && printf "⚶ ")%f %F{255%}${vcs_info_msg_0_}${upstream}%f"
     if [[ -n $vcs_info_msg_2_ ]];then
       left_prompt+="${vcs_info_msg_2_}"
     fi
