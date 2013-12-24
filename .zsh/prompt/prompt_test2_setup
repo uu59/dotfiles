@@ -1,0 +1,54 @@
+# vim: set ft=zsh:
+
+prompt_test2_setup () {
+  # .zsh/functions
+  . ${ZDOTDIR:-$HOME/.zsh/}functions
+
+  autoload -Uz add-zsh-hook
+  autoload -Uz vcs_info
+  zstyle ':vcs_info:*' max-exports 3
+  zstyle ':vcs_info:*' enable git
+  zstyle ':vcs_info:*' formats '%b'
+  # %m is expanded to empty string if hg-mg/stgit are unavailable
+  zstyle ':vcs_info:*' actionformats '%b' '%m' ' %F{189%}⚑ %a%f'
+
+  PROMPT2="%B%{%F{082%}%__> %b"
+
+  add-zsh-hook precmd _test2_update_prompt
+  add-zsh-hook precmd _test2_cleanup_hooks
+}
+
+
+_test2_cleanup_hooks () {
+  if [ "$prompt_theme" != "test2" ];then
+    add-zsh-hook -d precmd _test2_update_prompt
+    add-zsh-hook -d precmd _test2_cleanup_hooks
+  fi
+}
+
+_test2_update_prompt () {
+  local left_prompt
+  local right_prompt
+
+  printf "\n"
+  left_prompt+="%F{190%}%~%f "
+
+  __is_inside_git && LANG=C vcs_info
+  # 0: main
+  # 1: misc
+  # 2: rebase/merge
+  if [ -n "$vcs_info_msg_0_" ];then
+    left_prompt+="%F{255%}${vcs_info_msg_0_}%f%F{225%} $(__is_git_dirty && printf "⚶")%f"
+    if [[ -n $vcs_info_msg_2_ ]];then
+      left_prompt+="${vcs_info_msg_2_}"
+    fi
+  fi
+
+  PROMPT="${left_prompt}"$'\n'"%F{250%}%(!.#.$) %f"
+
+  right_prompt+="%{%F{244%}ruby $(__ruby_version)%f"
+  RPROMPT=$right_prompt
+}
+
+
+prompt_test2_setup "$@"

@@ -78,12 +78,65 @@ if [ $+commands[percol] -ne 0 ];then
  source "$_dir_/percol/function"
 fi
 
-# http://d.hatena.ne.jp/secondlife/20080218/1203303528
-# http://blog.m4i.jp/entry/2012/01/26/064329
-# autoload -Uz compinit compinit
-# source ~/.zsh/cdd/cdd
-# chpwd() {
-#     _cdd_chpwd
-# }
+__current_ruby_version() {
+  local version
+  if [ $+commands[rbenv] -ne 0 ];then
+    version=$(rbenv version-name)
+  elif [ $+commands[rvm-prompt] -ne 0 ]; then
+    version=$(rvm-prompt)
+  elif [ $+commands[ruby] -ne 0 ] ;then
+    version=$(ruby -e 'print %Q!#{RUBY_VERSION}-p#{RUBY_PATCHLEVEL}!')
+  fi
+  echo $version
+}
 
+__ruby_version() {
+  [[ $+commands[ruby] -eq 0 ]] && return
+
+  local -a readlink
+  case "${OSTYPE}" in
+    linux*)
+      readlink=(readlink -e)
+      ;;
+    darwin*)
+      readlink=(readlink )
+      ;;
+  esac
+  local ruby_path=$($readlink $(command -v ruby))
+  local ruby_ver
+  zstyle -s ':ruby:version' "$ruby_path" ruby_ver
+  : ${ruby_ver:="$(echo $ruby_path | grep -o -E '[0-9]\.[0-9]\.[0-9]-p[0-9]+')"}
+  if [ -n "$ruby_path" ];then
+    if [ -z "$ruby_ver" ];then
+      if [ $+commands[rbenv] -ne 0 ];then
+        ruby_ver=$(rbenv version-name)
+      elif [ $+commands[rvm-prompt] -ne 0 ]; then
+        ruby_ver=$(rvm-prompt)
+      elif [ $+commands[ruby] -ne 0 ] ;then
+        ruby_ver=$(ruby -e 'print %Q!#{RUBY_VERSION}-p#{RUBY_PATCHLEVEL}!')
+      fi
+      zstyle ':ruby:version' "$ruby_path" "$ruby_ver"
+    fi
+  fi
+  echo $ruby_ver
+}
+
+__is_inside_git() {
+  (\git rev-parse --is-inside-work-tree &>/dev/null && return 0) || return 1
+}
+
+__is_git_dirty() {
+  __is_inside_git || return 1
+  # https://gist.github.com/sindresorhus/3898739
+  # https://github.com/sindresorhus/pure/blob/master/prompt.zsh
+
+  # following line can't detect untracked files (but fast on huge repository)
+  # \git diff --quiet --ignore-submodules HEAD 2> /dev/null
+
+  if [ -z "$(git status --porcelain -uall 2> /dev/null)" ];then
+    return 1
+  else
+    return 0
+  fi
+}
 

@@ -16,7 +16,7 @@ fi
 fpath=($fpath "$_ZSH_DIRECTORY/prompt")
 autoload -Uz promptinit
 promptinit
-prompt "${ZSH_THEME:-"uu59"}"
+prompt "${ZSH_THEME:-"test2"}"
 
 # }}}
 
@@ -24,12 +24,12 @@ prompt "${ZSH_THEME:-"uu59"}"
 # This is default setting. updated by each prompt theme
 autoload -Uz vcs_info
 
-zstyle ':vcs_info:*' max-exports 3
-zstyle ':vcs_info:*' enable git svn hg
-zstyle ':vcs_info:*' formats '%s:[%b]'
-# %m is expanded to empty string if hg-mg/stgit are unavailable
-zstyle ':vcs_info:*' actionformats '%s[%b]' '%m' '<⚑ %a>'
-zstyle ':vcs_info:(svn|bzr):*' branchformat '%b:r%r'
+# zstyle ':vcs_info:*' max-exports 3
+# zstyle ':vcs_info:*' enable git svn hg
+# zstyle ':vcs_info:*' formats '%s:[%b]'
+# # %m is expanded to empty string if hg-mg/stgit are unavailable
+# zstyle ':vcs_info:*' actionformats '%s[%b]' '%m' '<⚑ %a>'
+# zstyle ':vcs_info:(svn|bzr):*' branchformat '%b:r%r'
 
 # }}}
 
