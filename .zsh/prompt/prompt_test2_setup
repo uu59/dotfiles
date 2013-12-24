@@ -46,7 +46,7 @@ _test2_update_prompt () {
       upstream=" -> $upstream"
       branchinfo="$upstream %F{248%}($remote)%f"
     fi
-    left_prompt+="%F{225%}$(__is_git_dirty && printf "⚶ ")%f %F{255%}${vcs_info_msg_0_}${branchinfo}%f"
+    left_prompt+="%F{225%}$(__is_git_dirty && printf "⚶  ")%f%F{255%}${vcs_info_msg_0_}${branchinfo}%f"
     if [[ -n $vcs_info_msg_2_ ]];then
       left_prompt+="${vcs_info_msg_2_}"
     fi
