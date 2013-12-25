@@ -41,10 +41,7 @@ _test2_update_prompt () {
     local branchinfo
     local upstream=$(__git_upstream)
     if [[ -n $upstream ]];then
-      local remote=${upstream%%/*}
-      [[ -n $remote ]] && remote=$(git config remote.$remote.url)
-      upstream=" -> $upstream"
-      branchinfo="$upstream %F{248%}($remote)%f"
+      branchinfo="-> $upstream %F{248%}($(__git_current_remote_url))%f"
     fi
     left_prompt+="%F{225%}$(__is_git_dirty && printf "⚶  ")%f%F{255%}${vcs_info_msg_0_}${branchinfo}%f"
     if [[ -n $vcs_info_msg_2_ ]];then

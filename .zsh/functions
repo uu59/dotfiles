@@ -122,7 +122,7 @@ __ruby_version() {
 }
 
 __is_inside_git() {
-  (\git rev-parse --is-inside-work-tree &>/dev/null && return 0) || return 1
+  (command git rev-parse --is-inside-work-tree &>/dev/null && return 0) || return 1
 }
 
 __is_git_dirty() {
@@ -141,7 +141,16 @@ __is_git_dirty() {
 }
 
 __git_upstream() {
+  __is_inside_git || return
   git for-each-ref --format='%(upstream:short)' $(git symbolic-ref HEAD)
   # below line required newer git:
   # git rev-parse --abbrev-ref @{u} 2>/dev/null
+}
+
+__git_current_remote_url() {
+  __is_inside_git || return
+  local upstream=$(__git_upstream)
+  local remote=${upstream%%/*}
+  [[ -n $remote ]] && remote=$(git config remote.$remote.url)
+  echo $remote
 }
