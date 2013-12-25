@@ -141,5 +141,7 @@ __is_git_dirty() {
 }
 
 __git_upstream() {
-  git rev-parse --abbrev-ref @{u} 2>/dev/null
+  git for-each-ref --format='%(upstream:short)' $(git symbolic-ref HEAD)
+  # below line required newer git:
+  # git rev-parse --abbrev-ref @{u} 2>/dev/null
 }
