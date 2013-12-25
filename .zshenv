@@ -34,6 +34,7 @@ if [ $+commands[rbenv] -ne 0 ]; then
 fi
 
 path=(
+  $HOME/.rbl/current/bin(N-/)
   $HOME/.rbenv/bin(N-/)
   $HOME/.nodebrew/current/bin(N-/)
   $HOME/.pyenv/versions/*/bin(N-/) # use pyenv as plain self-compiled python
