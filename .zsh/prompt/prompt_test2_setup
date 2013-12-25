@@ -38,12 +38,21 @@ _test2_update_prompt () {
   # 1: misc
   # 2: rebase/merge
   if [ -n "$vcs_info_msg_0_" ];then
+    local branch="$vcs_info_msg_0_"
     local branchinfo
     local upstream=$(__git_upstream)
     if [[ -n $upstream ]];then
-      branchinfo="-> $upstream %F{248%}($(__git_current_remote_url))%f"
+      local distance=""
+      local ahead=$(command git rev-list $upstream..$branch | wc -l)
+      if [[ $ahead -eq 0 ]];then
+        local behind=$(command git rev-list $branch..$upstream | wc -l)
+        [[ $behind -gt 0 ]] && distance="-${behind}"
+      else
+        distance="+${ahead}"
+      fi
+      branchinfo="-> $upstream [${distance}]%F{248%} ($(__git_current_remote_url))%f"
     fi
-    left_prompt+="%F{225%}$(__is_git_dirty && printf "⚶  ")%f%F{255%}${vcs_info_msg_0_}${branchinfo}%f"
+    left_prompt+="%F{225%}$(__is_git_dirty && printf "⚶  ")%f%F{255%}${branch}${branchinfo}%f"
     if [[ -n $vcs_info_msg_2_ ]];then
       left_prompt+="${vcs_info_msg_2_}"
     fi
