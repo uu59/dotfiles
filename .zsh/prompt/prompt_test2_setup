@@ -46,11 +46,11 @@ _test2_update_prompt () {
       local ahead=$(command git rev-list $upstream..$branch | wc -l)
       if [[ $ahead -eq 0 ]];then
         local behind=$(command git rev-list $branch..$upstream | wc -l)
-        [[ $behind -gt 0 ]] && distance="-${behind}"
+        [[ $behind -gt 0 ]] && distance="[-${behind}]"
       else
-        distance="+${ahead}"
+        distance="[+${ahead}]"
       fi
-      branchinfo="-> $upstream [${distance}]%F{248%} ($(__git_current_remote_url))%f"
+      branchinfo="-> $upstream ${distance}%F{248%} ($(__git_current_remote_url))%f"
     fi
     left_prompt+="%F{225%}$(__is_git_dirty && printf "⚶  ")%f%F{255%}${branch}${branchinfo}%f"
     if [[ -n $vcs_info_msg_2_ ]];then
