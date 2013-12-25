@@ -1,6 +1,5 @@
 # vim: set fdm=marker ft=zsh:
 
-
 # -- colorcheck() {{{
 
 function colorcheck() {
@@ -104,7 +103,6 @@ __ruby_version() {
   esac
   local ruby_path=$($readlink $(command -v ruby))
   local ruby_ver
-  zstyle -s ':ruby:version' "$ruby_path" ruby_ver
   : ${ruby_ver:="$(echo $ruby_path | grep -o -E '[0-9]\.[0-9]\.[0-9]-p[0-9]+')"}
   if [ -n "$ruby_path" ];then
     if [ -z "$ruby_ver" ];then
@@ -115,7 +113,6 @@ __ruby_version() {
       elif [ $+commands[ruby] -ne 0 ] ;then
         ruby_ver=$(ruby -e 'print %Q!#{RUBY_VERSION}-p#{RUBY_PATCHLEVEL}!')
       fi
-      zstyle ':ruby:version' "$ruby_path" "$ruby_ver"
     fi
   fi
   echo $ruby_ver
