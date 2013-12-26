@@ -139,7 +139,9 @@ __is_git_dirty() {
 
 __git_upstream() {
   __is_inside_git || return
-  git for-each-ref --format='%(upstream:short)' $(git symbolic-ref HEAD)
+  local branch="$(git symbolic-ref HEAD 2>/dev/null)"
+  [[ -z $branch ]] && return
+  git for-each-ref --format='%(upstream:short)' $branch 2>/dev/null
   # below line required newer git:
   # git rev-parse --abbrev-ref @{u} 2>/dev/null
 }
