@@ -43,9 +43,9 @@ _test2_update_prompt () {
     local upstream=$(__git_upstream)
     if [[ -n $upstream ]];then
       local distance=""
-      local ahead=$(command git rev-list $upstream..$branch | wc -l)
+      local ahead="$(command git rev-list $upstream..$branch | wc -l | sed 's/ //g')" # sed for OSX
       if [[ $ahead -eq 0 ]];then
-        local behind=$(command git rev-list $branch..$upstream | wc -l)
+        local behind="$(command git rev-list $branch..$upstream | wc -l | sed 's/ //g')" # sed for OSX
         [[ $behind -gt 0 ]] && distance="[-${behind}]"
       else
         distance="[+${ahead}]"
