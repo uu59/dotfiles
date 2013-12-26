@@ -6,11 +6,11 @@ prompt_test2_setup () {
 
   autoload -Uz add-zsh-hook
   autoload -Uz vcs_info
-  zstyle ':vcs_info:*' max-exports 3
+  zstyle ':vcs_info:*' max-exports 2
   zstyle ':vcs_info:*' enable git
   zstyle ':vcs_info:*' formats '%b'
   # %m is expanded to empty string if hg-mg/stgit are unavailable
-  zstyle ':vcs_info:*' actionformats '%b' '%m' ' %F{189%}⚑ %a%f'
+  zstyle ':vcs_info:*' actionformats '%b' ' %F{189%}⚑ %a%f'
 
   PROMPT2="%B%{%F{082%}%__> %b"
 
@@ -53,8 +53,8 @@ _test2_update_prompt () {
       branchinfo="-> $upstream ${distance}%F{248%} ($(__git_current_remote_url))%f"
     fi
     left_prompt+="%F{225%}$(__is_git_dirty && printf "⚶  ")%f%F{255%}${branch}${branchinfo}%f"
-    if [[ -n $vcs_info_msg_2_ ]];then
-      left_prompt+="${vcs_info_msg_2_}"
+    if [[ -n $vcs_info_msg_1_ ]];then
+      left_prompt+="${vcs_info_msg_1_}"
     fi
   fi
 
