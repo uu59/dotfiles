@@ -1,5 +1,7 @@
 [include]
   path = .gitconfig.local
+[log]
+  date = local
 [color]
   auto = true
   ui = auto
