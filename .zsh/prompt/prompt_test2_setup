@@ -27,6 +27,7 @@ _test2_cleanup_hooks () {
 }
 
 _test2_update_prompt () {
+  setopt localoptions glob globsubst extendedglob no_nomatch
   local left_prompt
   local right_prompt
 
@@ -45,8 +46,12 @@ _test2_update_prompt () {
       local distance=""
       local distance_cache_file="$gitdir/prompt.distance"
       local is_cache_fresh=1
-      for file in index FETCH_HEAD logs/HEAD; do
-        [[ $is_cache_fresh == 1 && -f $distance_cache_file && $gitdir/$file -nt $distance_cache_file ]] && is_cache_fresh=0
+      [[ ! -f $distance_cache_file ]] && is_cache_fresh=0
+      for filepath in index FETCH_HEAD "logs/**/*(N-.)"; do
+        [[ $is_cache_fresh == 0 ]] && break
+        for file in $gitdir/$filepath; do
+          [[ $file -nt $distance_cache_file ]] && is_cache_fresh=0
+        done
       done
 
       if [[ $is_cache_fresh == 1 && -f $distance_cache_file ]];then
