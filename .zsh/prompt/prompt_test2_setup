@@ -43,18 +43,17 @@ _test2_update_prompt () {
       local upstream=$(__git_upstream)
       local distance=""
       local distance_cache_file="$gitdir/prompt.distance"
-      if [[ $distance_cache_file -nt $gitdir/COMMIT_EDITMSG && $distance_cache_file -nt $gitdir/FETCH_HEAD ]];then
-        distance=$(cat $distance_cache_file)
+      for file in index FETCH_HEAD logs/HEAD; do
+        [[ -z $distance_cache_file && $gitdir/$file -nt $distance_cache_file ]] && distance_cache_file=$(cat $distance_cache_file)
+      done
+      local ahead="$(command git rev-list $upstream..$branch | wc -l | sed 's/ //g')" # sed for OSX
+      if [[ $ahead -eq 0 ]];then
+        local behind="$(command git rev-list $branch..$upstream | wc -l | sed 's/ //g')" # sed for OSX
+        [[ $behind -gt 0 ]] && distance="[-${behind}]"
       else
-        local ahead="$(command git rev-list $upstream..$branch | wc -l | sed 's/ //g')" # sed for OSX
-        if [[ $ahead -eq 0 ]];then
-          local behind="$(command git rev-list $branch..$upstream | wc -l | sed 's/ //g')" # sed for OSX
-          [[ $behind -gt 0 ]] && distance="[-${behind}]"
-        else
-          distance="[+${ahead}]"
-        fi
-        echo -n "%s" $distance > $distance_cache_file
+        distance="[+${ahead}]"
       fi
+      echo -n "%s" $distance > $distance_cache_file
       branchinfo="-> $upstream ${distance}%F{248%} ($(__git_current_remote_url))%f"
     fi
     left_prompt+="%F{225%}$(__is_git_dirty && printf "⚶  ")%f%F{255%}${branch}${branchinfo}%f"
