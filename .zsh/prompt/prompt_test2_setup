@@ -38,12 +38,12 @@ _test2_update_prompt () {
   if [ -n "$vcs_info_msg_0_" ];then
     local branch="$vcs_info_msg_0_"
     local branchinfo
-    local gitdir=$(git rev-parse --show-toplevel)
-    if [[ -d "$gitdir/.git/refs/remotes" ]];then
+    local gitdir=$(git rev-parse --git-dir)
+    if [[ -d "$gitdir/refs/remotes" ]];then
       local upstream=$(__git_upstream)
       local distance=""
-      local distance_cache_file="$gitdir/.git/prompt.distance"
-      if [[ $distance_cache_file -nt $gitdir/.git/COMMIT_EDITMSG && $distance_cache_file -nt $gitdir/.git/FETCH_HEAD ]];then
+      local distance_cache_file="$gitdir/prompt.distance"
+      if [[ $distance_cache_file -nt $gitdir/COMMIT_EDITMSG && $distance_cache_file -nt $gitdir/FETCH_HEAD ]];then
         distance=$(cat $distance_cache_file)
       else
         local ahead="$(command git rev-list $upstream..$branch | wc -l | sed 's/ //g')" # sed for OSX
