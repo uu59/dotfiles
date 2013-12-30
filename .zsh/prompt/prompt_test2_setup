@@ -39,15 +39,22 @@ _test2_update_prompt () {
   if [ -n "$vcs_info_msg_0_" ];then
     local branch="$vcs_info_msg_0_"
     local branchinfo
-    local upstream=$(__git_upstream)
-    if [[ -n $upstream ]];then
+    local gitdir=$(git rev-parse --show-toplevel)
+    if [[ -d "$gitdir/.git/refs/remotes" ]];then
+      local upstream=$(__git_upstream)
       local distance=""
-      local ahead="$(command git rev-list $upstream..$branch | wc -l | sed 's/ //g')" # sed for OSX
-      if [[ $ahead -eq 0 ]];then
-        local behind="$(command git rev-list $branch..$upstream | wc -l | sed 's/ //g')" # sed for OSX
-        [[ $behind -gt 0 ]] && distance="[-${behind}]"
+      local distance_cache_file="$gitdir/.git/prompt.distance"
+      if [[ $distance_cache_file -nt $gitdir/.git/COMMIT_EDITMSG && $distance_cache_file -nt $gitdir/.git/FETCH_HEAD ]];then
+        distance=$(cat $distance_cache_file)
       else
-        distance="[+${ahead}]"
+        local ahead="$(command git rev-list $upstream..$branch | wc -l | sed 's/ //g')" # sed for OSX
+        if [[ $ahead -eq 0 ]];then
+          local behind="$(command git rev-list $branch..$upstream | wc -l | sed 's/ //g')" # sed for OSX
+          [[ $behind -gt 0 ]] && distance="[-${behind}]"
+        else
+          distance="[+${ahead}]"
+        fi
+        echo -n "%s" $distance > $distance_cache_file
       fi
       branchinfo="-> $upstream ${distance}%F{248%} ($(__git_current_remote_url))%f"
     fi
