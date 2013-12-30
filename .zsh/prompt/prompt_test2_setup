@@ -30,7 +30,6 @@ _test2_update_prompt () {
   local left_prompt
   local right_prompt
 
-  printf "\n"
   left_prompt+="%F{190%}%~%f "
 
   __is_inside_git && LANG=C vcs_info
@@ -58,6 +57,7 @@ _test2_update_prompt () {
     fi
   fi
 
+  printf "\n"
   PROMPT="${left_prompt}"$'\n'"%F{250%}%(!.#.$) %f"
 
   right_prompt+="%{%F{244%}ruby $(__ruby_version)%f"
