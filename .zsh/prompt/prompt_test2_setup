@@ -32,7 +32,7 @@ _test2_update_prompt () {
 
   left_prompt+="%F{190%}%~%f "
 
-  __is_inside_git && LANG=C vcs_info
+  LANG=C vcs_info
   # 0: main
   # 1: rebase/merge
   if [ -n "$vcs_info_msg_0_" ];then
