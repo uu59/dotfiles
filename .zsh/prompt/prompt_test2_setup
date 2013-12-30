@@ -10,7 +10,7 @@ prompt_test2_setup () {
   zstyle ':vcs_info:*' enable git
   zstyle ':vcs_info:*' formats '%b'
   # %m is expanded to empty string if hg-mg/stgit are unavailable
-  zstyle ':vcs_info:*' actionformats '%b' ' %F{189%}⚑ %a%f'
+  zstyle ':vcs_info:*' actionformats '%b' ' %%F{189%}⚑ %a%%f'
 
   PROMPT2="%B%{%F{082%}%__> %b"
 
