@@ -34,8 +34,7 @@ _test2_update_prompt () {
 
   __is_inside_git && LANG=C vcs_info
   # 0: main
-  # 1: misc
-  # 2: rebase/merge
+  # 1: rebase/merge
   if [ -n "$vcs_info_msg_0_" ];then
     local branch="$vcs_info_msg_0_"
     local branchinfo
