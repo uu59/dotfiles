@@ -48,13 +48,13 @@ _test2_update_prompt () {
       local is_cache_fresh=1
       [[ ! -f $distance_cache_file ]] && is_cache_fresh=0
       for filepath in index FETCH_HEAD "logs/**/*(N-.)"; do
-        [[ $is_cache_fresh == 0 ]] && break
         for file in $gitdir/$filepath; do
+          [[ $is_cache_fresh == 0 ]] && break
           [[ $file -nt $distance_cache_file ]] && is_cache_fresh=0
         done
       done
 
-      if [[ $is_cache_fresh == 1 && -f $distance_cache_file ]];then
+      if [[ $is_cache_fresh == 1 ]];then
         read distance < $distance_cache_file
       else
         local ahead="$(command git rev-list $upstream..$branch | wc -l | sed 's/ //g')" # sed for OSX
@@ -64,7 +64,7 @@ _test2_update_prompt () {
         else
           distance="[+${ahead}]"
         fi
-        echo $distance > $distance_cache_file
+        echo -n $distance > $distance_cache_file
       fi
 
       branchinfo="-> $upstream ${distance}%F{248%} ($(__git_current_remote_url))%f"
