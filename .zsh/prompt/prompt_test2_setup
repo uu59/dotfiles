@@ -63,8 +63,7 @@ _test2_update_prompt () {
     fi
   fi
 
-  printf "\n"
-  PROMPT="${left_prompt}"$'\n'"%F{250%}%(!.#.$) %f"
+  PROMPT=$'\n'"${left_prompt}"$'\n'"%F{250%}%(!.#.$) %f"
 
   right_prompt+="%{%F{244%}ruby $(__ruby_version)%f"
   RPROMPT=$right_prompt
