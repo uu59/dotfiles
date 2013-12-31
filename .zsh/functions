@@ -102,7 +102,7 @@ __ruby_version() {
       ;;
   esac
   local ruby_path=$($readlink $(command -v ruby))
-  local cache="${ZDOTDIR-$HOME}/.zsh/cache/$ruby_path"
+  local cache="${ZDOTDIR-$HOME}/.zsh/cache$ruby_path"
   [[ -f $cache ]] && echo $(< $cache) && return
 
   mkdir -p ${cache%/*}
