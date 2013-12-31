@@ -27,7 +27,6 @@ _test2_cleanup_hooks () {
 }
 
 _test2_update_prompt () {
-  setopt localoptions glob globsubst extendedglob no_nomatch
   local left_prompt
   local right_prompt
 
@@ -39,20 +38,24 @@ _test2_update_prompt () {
   if [ -n "$vcs_info_msg_0_" ];then
     local branch="$vcs_info_msg_0_"
     local branchinfo
-    local gitdir=$(git rev-parse --git-dir)
-    local upstream=$(__git_upstream)
+    local upstream=$(__git_upstream "$branch")
     if [[ -n $upstream ]];then
       # distance between local..remote branches
       local distance=""
+      local gitdir=$(git rev-parse --git-dir)
       local distance_cache_file="$gitdir/prompt.distance"
       local is_cache_fresh=1
       [[ ! -f $distance_cache_file ]] && is_cache_fresh=0
-      for filepath in index FETCH_HEAD "logs/**/*(N-.)"; do
-        for file in $gitdir/$filepath; do
+      if [[ $is_cache_fresh -eq 1 ]];then
+        setopt localoptions glob globsubst extendedglob no_nomatch
+        for filepath in index FETCH_HEAD "logs/**/*(N-.)"; do
           [[ $is_cache_fresh == 0 ]] && break
-          [[ $file -nt $distance_cache_file ]] && is_cache_fresh=0
+          for file in $gitdir/$filepath; do
+            [[ $is_cache_fresh == 0 ]] && break
+            [[ $file -nt $distance_cache_file ]] && is_cache_fresh=0
+          done
         done
-      done
+      fi
 
       if [[ $is_cache_fresh == 1 ]];then
         read distance < $distance_cache_file
@@ -67,7 +70,7 @@ _test2_update_prompt () {
         echo -n $distance > $distance_cache_file
       fi
 
-      branchinfo="-> $upstream ${distance}%F{248%} ($(__git_current_remote_url))%f"
+      branchinfo="-> $upstream ${distance}%F{248%} ($(__git_current_remote_url "$upstream"))%f"
     fi
     left_prompt+="%F{225%}$(__is_git_dirty && printf "⚶  ")%f%F{255%}${branch}${branchinfo}%f"
     if [[ -n $vcs_info_msg_1_ ]];then

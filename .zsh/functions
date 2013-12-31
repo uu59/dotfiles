@@ -139,7 +139,12 @@ __is_git_dirty() {
 
 __git_upstream() {
   __is_inside_git || return
-  local branch="$(git symbolic-ref HEAD 2>/dev/null)"
+  local branch
+  if [[ -n $1 ]];then
+    branch="refs/heads/$1"
+  else
+    branch="$(git symbolic-ref HEAD 2>/dev/null)}"
+  fi
   [[ -z $branch ]] && return
   git for-each-ref --format='%(upstream:short)' $branch 2>/dev/null
   # below line required newer git:
@@ -148,7 +153,11 @@ __git_upstream() {
 
 __git_current_remote_url() {
   __is_inside_git || return
-  local upstream=$(__git_upstream)
+  if [[ -n $1 ]];then
+    local upstream="$1"
+  else
+    local upstream=$(__git_upstream)
+  fi
   local remote=${upstream%%/*}
   [[ -n $remote ]] && remote=$(git config remote.$remote.url)
   echo $remote
