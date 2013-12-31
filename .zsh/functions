@@ -103,9 +103,10 @@ __ruby_version() {
   esac
   local ruby_path=$($readlink $(command -v ruby))
   local cache="${ZDOTDIR-$HOME}/.zsh/cache/$ruby_path"
+  [[ -f $cache ]] && echo $(< $cache) && return
+
   mkdir -p ${cache%/*}
   local ruby_ver
-  [[ -f $cache ]] && ruby_ver=`cat $cache`
   if [ -n "$ruby_path" ];then
     : ${ruby_ver:="$(echo $ruby_path | grep -o -E '[0-9]\.[0-9]\.[0-9]-p[0-9]+')"}
     if [ -z "$ruby_ver" ];then
