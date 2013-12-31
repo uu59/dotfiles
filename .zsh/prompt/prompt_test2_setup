@@ -6,11 +6,11 @@ prompt_test2_setup () {
 
   autoload -Uz add-zsh-hook
   autoload -Uz vcs_info
-  zstyle ':vcs_info:*' max-exports 2
+  zstyle ':vcs_info:*' max-exports 3
   zstyle ':vcs_info:*' enable git
-  zstyle ':vcs_info:*' formats '%b'
+  zstyle ':vcs_info:*' formats '%b' '%R'
   # %m is expanded to empty string if hg-mg/stgit are unavailable
-  zstyle ':vcs_info:*' actionformats '%b' ' %%F{189%}⚑ %a%%f'
+  zstyle ':vcs_info:*' actionformats '%b' '%R' ' %%F{189%}⚑ %a%%f'
 
   PROMPT2="%B%{%F{082%}%__> %b"
 
@@ -36,30 +36,33 @@ _test2_update_prompt () {
   # 0: main
   # 1: rebase/merge
   if [ -n "$vcs_info_msg_0_" ];then
-    local branch="$vcs_info_msg_0_"
-    local branchinfo
-    local upstream=$(__git_upstream "$branch")
-    if [[ -n $upstream ]];then
-      # distance between local..remote branches
-      local distance=""
-      local gitdir=$(git rev-parse --git-dir)
-      local distance_cache_file="$gitdir/prompt.distance"
+    local gitdir=$vcs_info_msg_1_/.git
+    () {
+      local prompt_cache_file="$gitdir/prompt_${prompt_theme}.cache"
       local is_cache_fresh=1
-      [[ ! -f $distance_cache_file ]] && is_cache_fresh=0
+      [[ ! -f $prompt_cache_file ]] && is_cache_fresh=0
       if [[ $is_cache_fresh -eq 1 ]];then
         setopt localoptions glob globsubst extendedglob no_nomatch
-        for filepath in index FETCH_HEAD "logs/**/*(N-.)"; do
+        for filepath in config index FETCH_HEAD "logs/**/*(N-.)"; do
           [[ $is_cache_fresh == 0 ]] && break
           for file in $gitdir/$filepath; do
             [[ $is_cache_fresh == 0 ]] && break
-            [[ $file -nt $distance_cache_file ]] && is_cache_fresh=0
+            [[ $file -nt $prompt_cache_file ]] && is_cache_fresh=0
           done
         done
       fi
 
-      if [[ $is_cache_fresh == 1 ]];then
-        read distance < $distance_cache_file
-      else
+      if [[ $is_cache_fresh -eq 1 ]];then
+        left_prompt=$(< $prompt_cache_file)
+        return
+      fi
+
+      local branch="$vcs_info_msg_0_"
+      local branchinfo
+      local upstream=$(__git_upstream "$branch")
+      if [[ -n $upstream ]];then
+        # distance between local..remote branches
+        local distance=""
         local ahead="$(command git rev-list $upstream..$branch | wc -l | sed 's/ //g')" # sed for OSX
         if [[ $ahead -eq 0 ]];then
           local behind="$(command git rev-list $branch..$upstream | wc -l | sed 's/ //g')" # sed for OSX
@@ -67,15 +70,14 @@ _test2_update_prompt () {
         else
           distance="[+${ahead}]"
         fi
-        echo -n $distance > $distance_cache_file
+        branchinfo="-> $upstream ${distance}%F{248%} ($(__git_current_remote_url "$upstream"))%f"
       fi
-
-      branchinfo="-> $upstream ${distance}%F{248%} ($(__git_current_remote_url "$upstream"))%f"
-    fi
-    left_prompt+="%F{225%}$(__is_git_dirty && printf "⚶  ")%f%F{255%}${branch}${branchinfo}%f"
-    if [[ -n $vcs_info_msg_1_ ]];then
-      left_prompt+="${vcs_info_msg_1_}"
-    fi
+      left_prompt+="%F{225%}$(__is_git_dirty && printf "⚶  ")%f%F{255%}${branch}${branchinfo}%f"
+      if [[ -n $vcs_info_msg_2_ ]];then
+        left_prompt+="${vcs_info_msg_2_}"
+      fi
+      echo -n $left_prompt > $prompt_cache_file
+    }
   fi
 
   PROMPT=$'\n'"${left_prompt}"$'\n'"%F{250%}%(!.#.$) %f"
