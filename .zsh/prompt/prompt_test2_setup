@@ -70,7 +70,7 @@ _test2_update_prompt () {
         else
           distance="[+${ahead}]"
         fi
-        branchinfo="-> $upstream ${distance}%F{248%} ($(__git_current_remote_url "$upstream"))%f"
+        branchinfo=" -> $upstream ${distance}%F{248%} ($(__git_current_remote_url "$upstream"))%f"
       fi
       left_prompt+="%F{225%}__is_git_dirty%f%F{255%}${branch}%f${branchinfo}"
       if [[ -n $vcs_info_msg_2_ ]];then
