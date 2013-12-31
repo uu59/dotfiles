@@ -130,7 +130,10 @@ __is_git_dirty() {
   # following line can't detect untracked files (but fast on huge repository)
   # \git diff --quiet --ignore-submodules HEAD 2> /dev/null
 
-  if [ -z "$(git status --porcelain -uall 2> /dev/null)" ];then
+  ( git diff --quiet --ignore-submodules HEAD 2>/dev/null ) || return 0
+
+  # looks clean, but check untracked file
+  if [ -z "$(git clean -dn)" ];then
     return 1
   else
     return 0
