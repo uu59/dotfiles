@@ -34,7 +34,8 @@ _test2_update_prompt () {
 
   LANG=C vcs_info
   # 0: main
-  # 1: rebase/merge
+  # 1: git dir
+  # 2: rebase/merge
   if [ -n "$vcs_info_msg_0_" ];then
     local gitdir=$vcs_info_msg_1_/.git
     () {
