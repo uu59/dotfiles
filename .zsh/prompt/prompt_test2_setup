@@ -85,7 +85,8 @@ _test2_update_prompt () {
     if [[ -n $vcs_info_msg_0_ ]];then
       is_dirty=$(__is_git_dirty && printf "⚶  ")
     fi
-    PROMPT=$'\n'"${left_prompt/__is_git_dirty/${is_dirty}}"$'\n'"%F{250%}%(!.#.$) %f"
+    echo -n $'\n'
+    PROMPT="${left_prompt/__is_git_dirty/${is_dirty}}"$'\n'"%F{250%}%(!.#.$) %f"
   }
   update_left_prompt
 
