@@ -13,7 +13,7 @@ fi
 
 # prompt {{{
 
-fpath=($fpath "$_ZSH_DIRECTORY/prompt")
+fpath=("$_ZSH_DIRECTORY/prompt" $fpath)
 autoload -Uz promptinit
 promptinit
 prompt "${ZSH_THEME:-"test2"}"
