@@ -13,7 +13,13 @@ fi
 
 # prompt {{{
 
-fpath=("$_ZSH_DIRECTORY/prompt" $fpath)
+# set $fpath before compinit
+fpath=(
+  "$_ZSH_DIRECTORY/prompt"
+  $fpath
+  "$_ZSH_DIRECTORY/zsh-completions/src"(N-/)
+  "$HOME/src/git/contrib/completion"(N-/)
+)
 autoload -Uz promptinit
 promptinit
 prompt "${ZSH_THEME:-"test2"}"
@@ -223,12 +229,6 @@ fi
 
 # completion {{{
 
-# set $fpath before compinit
-fpath=(
-  $fpath
-  "$_ZSH_DIRECTORY/zsh-completions/src"(N-/)
-  "$HOME/src/git/contrib/completion"(N-/)
-)
 local GIT_COMPLETION_FILE="${GIT_COMPLETION_FILE:-${HOME}/src/git/contrib/completion/git-completion.sh}"
 if [ -n "$GIT_COMPLETION_FILE" -a -f "$GIT_COMPLETION_FILE" ];then
   zstyle ':completion:*:*:git:*' script $GIT_COMPLETION_FILE
