@@ -119,10 +119,10 @@ __ruby_version() {
         ruby_ver=$(rbenv version-name)
       elif [ $+commands[ruby] -ne 0 ] ;then
         ruby_ver=$(ruby -e 'print %Q!#{RUBY_VERSION}-p#{RUBY_PATCHLEVEL}!')
+        echo -n $ruby_ver > $cache
       fi
     fi
   fi
-  echo -n $ruby_ver > $cache
   echo $ruby_ver
 }
 

@@ -29,10 +29,6 @@ if [ -f "$HOME/.zsh-local-only" ]; then
   . "$HOME/.zsh-local-only"
 fi
 
-if [ $+commands[rbenv] -ne 0 ]; then
-  eval "$(rbenv init - --no-rehash)"
-fi
-
 path=(
   #$HOME/.rbl/current/bin(N-/)
   $HOME/.rbenv/bin(N-/)
@@ -41,6 +37,32 @@ path=(
   $HOME/.pyenv/bin(N-/)
   ${path}
 )
+
+if [ $+commands[rbenv] -ne 0 ]; then
+  rbenv_init(){
+    # eval "$(rbenv init - --no-rehash)" is crazy slow (it takes arround 100ms)
+    # below style took ~2ms
+    export RBENV_SHELL=zsh
+    source "$HOME/.rbenv/completions/rbenv.zsh"
+    rbenv() {
+      local command
+      command="$1"
+      if [ "$#" -gt 0 ]; then
+        shift
+      fi
+
+      case "$command" in
+      rehash|shell)
+        eval "`rbenv "sh-$command" "$@"`";;
+      *)
+        command rbenv "$command" "$@";;
+      esac
+    }
+    path=($HOME/.rbenv/shims $path)
+  }
+  rbenv_init
+  unfunction rbenv_init
+fi
 
 if [ $+commands[nodebrew] -ne 0 ]; then
   export NODE_PATH=$HOME/.nodebrew/current/lib/node_modules
