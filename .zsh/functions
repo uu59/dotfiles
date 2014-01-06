@@ -106,7 +106,10 @@ __ruby_version() {
       readlink=(readlink )
       ;;
   esac
-  local ruby_path=$($readlink $(command -v ruby))
+  local ruby_path="$(command -v ruby)"
+  while [[ -h $ruby_path ]];do
+    ruby_path="$($readlink $ruby_path)" # for OSX, readlink returns "" if ruby is not symlink
+  done
   local cache="${ZDOTDIR-$HOME}/.zsh/cache$ruby_path"
   [[ -f $cache ]] && echo $(< $cache) && return
 
