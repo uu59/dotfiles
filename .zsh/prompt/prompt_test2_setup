@@ -38,6 +38,7 @@ _test2_update_prompt () {
   # 2: rebase/merge
   if [ -n "$vcs_info_msg_0_" ];then
     local gitdir=$vcs_info_msg_1_/.git
+    [[ -f $gitdir ]] && gitdir="$(git rev-parse --git-dir)" # submodule
     () {
       local prompt_cache_file="$gitdir/prompt_${prompt_theme}.cache"
       local is_cache_fresh=1
