@@ -258,7 +258,7 @@ zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 
 
 # Don't use slow completion
-for slowcomp in gem npm; do
+for slowcomp in gem npm knife; do
   compdef -d $slowcomp
 done
 
