@@ -168,6 +168,8 @@ bindkey '^W' tcsh-backward-delete-word
 
 () { # incr-0.2 {{{
   . $_ZSH_DIRECTORY/incr-0.2-custom.zsh
+  # リモートがらみの補完は重いのでしない
+  zstyle ':completion:*:files' remote-access no
 } # }}}
 
 () { # autosuggestions {{{
@@ -257,10 +259,10 @@ zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 # }}}
 
 
-# Don't use slow completion
-for slowcomp in gem npm knife; do
-  compdef -d $slowcomp
-done
+# Don't use slow completion (looks remote-access no solved)
+#for slowcomp in gem npm knife; do
+#  compdef -d $slowcomp
+#done
 
 # http://www.reddit.com/r/commandline/comments/12g76v/how_to_automatically_source_zshrc_in_all_open/
 trap "source ~/.zshrc && rehash" USR1
