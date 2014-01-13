@@ -1,4 +1,5 @@
 #zmodload zsh/zprof && zprof
+export PROMPT4="+ %x:%I $ "
 typeset -U path cdpath fpath manpath
 
 export LS_COLORS="di=38;05;117"
