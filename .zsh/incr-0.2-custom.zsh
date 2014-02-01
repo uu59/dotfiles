@@ -33,6 +33,7 @@ bindkey -M emacs '^i' expand-or-complete-prefix-incr
 add-zsh-hook preexec reset-color
 
 unsetopt automenu
+setopt menucomplete # always show comp menu
 #compdef -d scp
 #compdef -d tar
 #compdef -d make
@@ -92,11 +93,12 @@ function show-prediction
 			if [[ "$buffer_org" != "$buffer_prd" ]] || ((cursor_org != cursor_prd)); then
 				now_predict=1
 			fi
+			BUFFER="$buffer_org"
+			CURSOR="$cursor_org"
 		else
 			BUFFER="$buffer_org"
 			CURSOR="$cursor_org"
 		fi
-		printf "\x1b[38;5;108m"
 	else
 		zle -M ""
 	fi
