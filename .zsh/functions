@@ -1,5 +1,16 @@
 # vim: set fdm=marker ft=zsh:
 
+colorcheck_ansi() {
+  for color in `seq 30 37`; do
+    printf "\x1b[${color}m${color}\x1b[0m "
+  done
+  echo
+  for color in `seq 40 47`; do
+    printf "\x1b[${color}m${color}\x1b[0m "
+  done
+  echo
+}
+
 # -- colorcheck() {{{
 
 function colorcheck() {
