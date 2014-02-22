@@ -41,6 +41,7 @@ autoload -Uz vcs_info
 
 # variables {{{
 
+zstyle -e ':completion:*:default' list-colors 'reply=("${PREFIX:+=(#bi)($PREFIX:t)(?)*==38;5;158=0}:${(s.:.)LS_COLORS}")'
 zle_highlight=(isearch:fg="228",underline)
 
 setopt bsd_echo
@@ -167,9 +168,9 @@ bindkey '^W' tcsh-backward-delete-word
 } # }}}
 
 () { # incr-0.2 {{{
-  . $_ZSH_DIRECTORY/incr-0.2-custom.zsh
+  #. $_ZSH_DIRECTORY/incr-0.2-custom.zsh
   # リモートがらみの補完は重いのでしない
-  zstyle ':completion:*:files' remote-access no
+  #zstyle ':completion:*:files' remote-access no
 } # }}}
 
 () { # autosuggestions {{{
