@@ -19,9 +19,16 @@ update() {
   cmd="${2:-"git pull --rebase"}"
   if [ -d "$dir" ];then
     (
-      echo $dir
+      set +e
+      printf "\x1b[33mcd %s; %s\x1b[0m\n" "$dir" "$cmd"
       cd $dir
-      $cmd
+      # http://unix.stackexchange.com/a/88338
+      local ret
+      ret=$($cmd 2>&1)
+      if [ $? -ne 0 ];then
+        color="31"
+      fi
+      printf "\x1b[${color:-0}m%s\x1b[0m\n" "$ret"
     )
   fi
 }
