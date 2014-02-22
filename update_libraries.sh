@@ -33,8 +33,10 @@ update() {
   fi
 }
 
+DOTFILES=$(dirname $0)
+
 update "$HOME/.rbenv"
 update "$HOME/.rbenv/plugins/ruby-build/"
 update "$HOME/.nodebrew/" "nodebrew selfupdate"
 update "$HOME/.pyenv/"
-
+update "$DOTFILES"
