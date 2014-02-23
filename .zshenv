@@ -12,6 +12,7 @@ case ${OSTYPE} in
   linux*)
     export CFLAGS="-O2 -march=native -pipe"
     export CXXFLAGS="${CFLAGS}"
+    export MAKE_OPTS="-j $(grep -w -F -c processor /proc/cpuinfo)"
     ;;
 esac
 export GREP_OPTIONS='--binary-files=without-match --directories=skip --color=auto'
