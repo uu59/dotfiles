@@ -1,0 +1,13 @@
+#!/bin/bash
+# vim:ft=sh:
+
+if command -v xsel >/dev/null; then
+  # Linux
+  xsel -i -b
+elif command -v pbcopy >/dev/null; then
+  # Mac
+  pbcopy
+elif command -v putclip >/dev/null; then
+  # Cygwin
+  putclip
+fi

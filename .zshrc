@@ -107,16 +107,7 @@ alias grep="LANG=C grep" # http://blog.uu59.org/2014-02-28-grep-ignore-case-fast
 
 # C で標準出力をクリップボードにコピーする
 # mollifier delta blog : http://mollifier.hatenablog.com/entry/20100317/p1
-if which xsel >/dev/null 2>&1 ; then
-  # Linux
-  alias -g C='| xsel --input --clipboard'
-elif which pbcopy >/dev/null 2>&1 ; then
-  # Mac
-  alias -g C='| pbcopy'
-elif which putclip >/dev/null 2>&1 ; then
-  # Cygwin
-  alias -g C='| putclip'
-fi
+alias -g C="| copy-to-clipboard"
 
 # }}}
 
