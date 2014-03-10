@@ -264,3 +264,6 @@ trap "source ~/.zshrc && rehash" USR1
 if (command -v zprof > /dev/null 2>&1) ;then
   zprof | less
 fi
+
+### Added by the Heroku Toolbelt
+export PATH="/usr/local/heroku/bin:$PATH"
