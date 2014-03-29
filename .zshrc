@@ -1,7 +1,7 @@
 # vim: set fdm=marker: 
 
 export TERM=xterm-256color
-local _ZSH_DIRECTORY="$HOME/.zsh"
+local _ZSH_DIRECTORY="${HOME:-$ZDOTDIR}/.zsh"
 
 autoload -Uz add-zsh-hook
 autoload -Uz edit-command-line # C-x C-e

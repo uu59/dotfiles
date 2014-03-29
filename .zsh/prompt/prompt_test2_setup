@@ -2,7 +2,7 @@
 
 prompt_test2_setup () {
   # .zsh/functions
-  . ${ZDOTDIR:-$HOME/.zsh/}functions
+  . ${ZDOTDIR:-$HOME/.zsh}/functions
 
   autoload -Uz add-zsh-hook
   autoload -Uz vcs_info
