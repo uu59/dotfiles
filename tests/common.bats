@@ -27,13 +27,3 @@ debug() {
 @test "executable pip" {
   command -v pip
 }
-
-@test "runnable zsh" {
-  DIR="${BATS_TEST_DIRNAME}/../"
-  export ZDOTDIR=$BATS_TMPDIR/zsh-test
-  mkdir -p $ZDOTDIR
-  cp -a $DIR/.zsh* $ZDOTDIR/
-  cp -a $DIR/.zsh/* $ZDOTDIR/
-  run zsh -l -i -c exit
-  [ $status -eq 0 ]
-}
