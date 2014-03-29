@@ -8,4 +8,6 @@ usage_exit () {
 }
 
 dir=$(dirname $0)
+cd $dir
+git submodule update --init
 $dir/bats/bin/bats $dir/tests $*

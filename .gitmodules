@@ -7,3 +7,6 @@
 [submodule ".zsh/zsh-autosuggestions"]
 	path = .zsh/zsh-autosuggestions
 	url = https://github.com/tarruda/zsh-autosuggestions
+[submodule "bats"]
+	path = bats
+	url = https://github.com/sstephenson/bats
