@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# プロセスに紐付いたttyを取得する http://bit.ly/1eDpRpu
+# プロセスに紐付いたttyを取得する http://qiita.com/kawaz/items/bd33fe1e29876939dddb
 function search_tty() {
   local pid=${1:-$$} tty=""
   while [[ 1 -lt $pid ]]; do
