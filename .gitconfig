@@ -13,3 +13,6 @@
   default = simple
 [merge]
   log = true
+[user]
+	name = uu59
+	email = k@uu59.org
