@@ -98,7 +98,7 @@ _test2_update_prompt () {
   update_left_prompt
 
   update_right_prompt() {
-    right_prompt+="%{%F{244%}ruby $(__ruby_version)%f"
+    right_prompt+="%F{244%}ruby $(__ruby_version)%f"
     RPROMPT=$right_prompt
   }
   update_right_prompt
