@@ -208,10 +208,25 @@ fi
 # tmux {{{
 if [ -n "$TMUX_PANE" ] ;then
   tmux-pane-title-set () {
-    [ -n "${TMUX_PANE}" ] && [ $# -gt 0 ] && printf '\033]2;'${${1## #}%% *}'\033\\'
+    [[ -n "${TMUX_PANE}" ]] && [[ $# -gt 0 ]] && printf '\033]2;'$1'\033\\'
   }
-  add-zsh-hook preexec tmux-pane-title-set
-  tmux-pane-title-set "zsh"
+  tmux-preexec () {
+    if [[ -n $TMUX_PANE ]] && [[ $# -gt 0 ]]; then
+      case "$2" in
+        ssh\ *)
+          tmux-pane-title-set "ssh:${3/ssh /}"
+          ;;
+        *)
+          tmux-pane-title-set "$1"
+          ;;
+      esac
+    fi
+  }
+  tmux-precmd () {
+    tmux-pane-title-set "zsh"
+  }
+  add-zsh-hook preexec tmux-preexec
+  add-zsh-hook precmd tmux-precmd
 fi
 
 if [ -n "$TMUX" ]; then
