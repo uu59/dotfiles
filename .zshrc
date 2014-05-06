@@ -208,7 +208,7 @@ fi
 # tmux {{{
 if [ -n "$TMUX_PANE" ] ;then
   tmux-pane-title-set () {
-    [[ -n "${TMUX_PANE}" ]] && [[ $# -gt 0 ]] && printf '\033]2;'$1'\033\\'
+    [[ -n "${TMUX_PANE}" ]] && [[ $# -gt 0 ]] && printf '\033]2;%s\033\\' $1
   }
   tmux-preexec () {
     if [[ -n $TMUX_PANE ]] && [[ $# -gt 0 ]]; then
