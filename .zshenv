@@ -16,9 +16,9 @@ case ${OSTYPE} in
     ;;
 esac
 export GREP_OPTIONS='--binary-files=without-match --directories=skip --color=auto'
-export GISTY_DIR=$HOME/gisty
+export GOPATH="$HOME/gopath"
 
-path=($HOME/bin(N-/) $HOME/local/bin(N-/) /usr/local/bin /opt/bin(N-/) /usr/local/sbin(N-/) ${path})
+path=($HOME/bin(N-/) $HOME/local/bin(N-/) /usr/local/bin /opt/bin(N-/) /usr/local/sbin(N-/) $GOPATH/bin(N-/) ${path})
 
 #  --single-process --no-proxy-server \
 export CHROME_OPTIONS="--no-referrers --disk-cache-dir=/tmp/chromecache --disk-cache-size=102400 \
