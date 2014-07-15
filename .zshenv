@@ -26,7 +26,7 @@ export CHROME_OPTIONS="--no-referrers --disk-cache-dir=/tmp/chromecache --disk-c
   --process-per-tab \
   --disable-sync --disable-geolocation --disable-content-prefetch --disable-preconnect --disable-connect-backup-jobs \
    "
-export CHROMIUM_FLAGS="--renderer-process-limit=5 --disable-sync --disk-cache-size=1024000 --disable-print-preview"
+export CHROMIUM_USER_FLAGS="--renderer-process-limit=5 --disable-sync --disk-cache-size=1024000 --disable-print-preview"
 
 if [ -f "$HOME/.zsh-local-only" ]; then
   . "$HOME/.zsh-local-only"
