@@ -1,0 +1,45 @@
+" vim:ft=vim:
+
+set popups=tab
+nnoremap j 5j
+nnoremap k 5k
+colorscheme sweets_dita
+set hintchars=asdfjkipo
+
+vmap <C-g> y<ESC><ESC>:<C-u><S-Insert><C-a>tabopen  <Left> 
+vnoremap <C-u> 5k
+vnoremap <C-d> 5j
+"noremap ZZ <NOP>
+noremap ZQ <NOP>
+noremap a <NOP>
+noremap A <NOP>
+nnoremap <C-p> :<C-u>tp<CR>
+nnoremap <C-n> :<C-u>tn<CR>
+
+set! ui.caretWidth=4
+set showstatuslinks=1
+set complete=sS
+set defsearch=y
+cmap <C-p> <Up>
+cmap <C-n> <Down>
+map ,R :<C-u>so ~/.vimperatorrc<CR>
+
+:source ~/.vimperator/plugin/_libly.js
+
+" twitterとか開いたときにinput要素にfocusを奪われないようにする
+set focuscontent
+
+style -name commandline-ime chrome://* #liberator-commandline-command input { ime-mode: inactive; }
+
+
+
+" feedSomeKeys_3
+command! -nargs=+ lazy autocmd VimperatorEnter .* <args>
+lazy fmaps -u='(fastladder|livedoor)\.com/reader' r j k s a p o v c i,p <Space> <S-Space> z b < > q w e,g r Z <S-z> : d <delete> <Del> ?
+
+" util
+nnoremap \" :js util.copyToClipboard("["+buffer.title+"](" + buffer.URL + ")");<CR>:echo 'Copied title and URL as Markdown style'<CR>
+
+echo "ロードおわり"
+
+
