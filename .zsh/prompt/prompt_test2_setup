@@ -87,8 +87,7 @@ _test2_update_prompt () {
     if [[ -n $vcs_info_msg_0_ ]];then
       is_dirty=$(__is_git_dirty && printf "⚶  ")
     fi
-    echo -n $'\n'
-    left_prompt="${left_prompt/__is_git_dirty/${is_dirty}}"$'\n'
+    left_prompt=$'\n'"${left_prompt/__is_git_dirty/${is_dirty}}"$'\n'
     if [[ -n $SSH_CONNECTION ]];then
       left_prompt+="%F{230%}$HOST%f "
     fi
