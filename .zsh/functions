@@ -149,13 +149,9 @@ __is_git_dirty() {
   # https://gist.github.com/sindresorhus/3898739
   # https://github.com/sindresorhus/pure/blob/master/prompt.zsh
 
-  # following line can't detect untracked files (but fast on huge repository)
-  # \git diff --quiet --ignore-submodules HEAD 2> /dev/null
-
-  ( git diff --quiet --ignore-submodules HEAD 2>/dev/null ) || return 0
-
-  # looks clean, but check untracked file
-  if [ -z "$(git clean -dn)" ];then
+  # clean -dn is slow if repo has lots of untracked files
+  # if [ -z "$(git clean -dn)" ];then
+  if [ -z "$(git status --porcelain --ignore-submodules)" ];then
     return 1
   else
     return 0
