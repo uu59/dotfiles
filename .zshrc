@@ -102,7 +102,9 @@ esac
 alias tmux="tmux -2"
 alias df="LANG=C df"
 alias sort="LC_ALL=C sort"
-alias grep="LANG=C grep" # http://blog.uu59.org/2014-02-28-grep-ignore-case-fast.html
+# http://blog.uu59.org/2014-02-28-grep-ignore-case-fast.html
+# grep: warning: GREP_OPTIONS is deprecated; please use an alias or script   
+alias grep="LANG=C grep --binary-files=without-match --directories=skip --color=auto"
 
 
 # C で標準出力をクリップボードにコピーする

@@ -15,7 +15,6 @@ case ${OSTYPE} in
     export MAKE_OPTS="-j $(grep -w -F -c processor /proc/cpuinfo)"
     ;;
 esac
-export GREP_OPTIONS='--binary-files=without-match --directories=skip --color=auto'
 export GOPATH="$HOME/gopath"
 
 path=($HOME/bin(N-/) $HOME/local/bin(N-/) /usr/local/bin /opt/bin(N-/) /usr/local/sbin(N-/) $GOPATH/bin(N-/) ${path})
