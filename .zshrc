@@ -141,6 +141,9 @@ bindkey '^[e' my-edit-command-line # ESC e
 
 bindkey '^V' vi-quoted-insert
 
+bindkey '^]'   vi-find-next-char
+bindkey '^[^]' vi-find-prev-char
+
 # vimぽいC-w
 tcsh-backward-delete-word () {
   local WORDCHARS="${WORDCHARS:s#/#}"
