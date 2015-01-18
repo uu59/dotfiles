@@ -26,7 +26,10 @@ export CHROME_OPTIONS="--no-referrers --disk-cache-dir=/tmp/chromecache --disk-c
   --disable-sync --disable-geolocation --disable-content-prefetch --disable-preconnect --disable-connect-backup-jobs \
    "
 export CHROMIUM_USER_FLAGS="\
-  --disable-history-quick-provider --disable-history-url-provider \
+  --disable-manager-for-sync-signin \
+  --disable-preconnect \
+  --disable-prerender-local-predictor \
+  --disable-translate \
   --renderer-process-limit=5 --disable-sync --disk-cache-size=1024000 --disable-print-preview\
   "
 
