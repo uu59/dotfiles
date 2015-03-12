@@ -1,6 +1,6 @@
 @test "bundle config jobs" {
   run bundle config jobs
-  current=$(grep -o '[0-9]*' <(echo $output))
+  current="$(grep -o '"[0-9]*"' <<< $output | sed 's/"//g')"
   [[ -n $current && $current -ge 4 ]]
 }
 
