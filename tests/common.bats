@@ -12,12 +12,28 @@ debug() {
   command -v gem
 }
 
+@test "executable bundle" {
+  command -v bundle
+}
+
+@test "executable kramdown" {
+  command -v kramdown
+}
+
 @test "executable node" {
   command -v node
 }
 
 @test "executable npm" {
   command -v npm
+}
+
+@test "executable coffee" {
+  command -v coffee
+}
+
+@test "executable babel" {
+  command -v babel
 }
 
 @test "executable python" {
