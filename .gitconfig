@@ -13,6 +13,8 @@
   default = simple
 [merge]
   log = true
+[diff]
+  algorithm = histogram
 [user]
 	name = uu59
 	email = k@uu59.org
