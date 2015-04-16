@@ -22,16 +22,21 @@ path=($HOME/bin(N-/) $HOME/local/bin(N-/) /usr/local/bin /opt/bin(N-/) /usr/loca
 #  --single-process --no-proxy-server \
 export CHROME_OPTIONS="--no-referrers --disk-cache-dir=/tmp/chromecache --disk-cache-size=102400 \
   --media-cache-size=104800 --enable-click-to-play --purge-memory-button \
-  --process-per-tab \
-  --disable-sync --disable-geolocation --disable-content-prefetch --disable-preconnect --disable-connect-backup-jobs \
-   "
-export CHROMIUM_USER_FLAGS="\
-  --disable-manager-for-sync-signin \
+  --disable-sync \
+  --disable-geolocation \
+  --disable-content-prefetch \
   --disable-preconnect \
   --disable-prerender-local-predictor \
-  --disable-translate \
-  --renderer-process-limit=5 --disable-sync --disk-cache-size=1024000 --disable-print-preview\
-  "
+  --disable-connect-backup-jobs \
+  --disable-print-preview \
+   "
+#export CHROMIUM_USER_FLAGS="\
+#  --disable-manager-for-sync-signin \
+#  --disable-preconnect \
+#  --disable-prerender-local-predictor \
+#  --disable-translate \
+#  --renderer-process-limit=5 --disable-sync --disk-cache-size=1024000 --disable-print-preview\
+#  "
 
 if [ -f "$HOME/.zsh-local-only" ]; then
   . "$HOME/.zsh-local-only"
