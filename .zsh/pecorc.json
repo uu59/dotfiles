@@ -1,0 +1,15 @@
+{
+  "InitialFilter": "SmartCase",
+  "Prompt": "peco>",
+  "Keymap": {
+    "Space": "peco.ToggleSelectionAndSelectNext",
+    "C-v": "peco.ToggleRangeMode"
+  },
+  "Style": {
+    "Basic": ["on_default", "default"],
+    "SavedSelection": ["bold", "green"],
+    "Selected": ["bold", "on_yellow", "white"],
+    "Query": ["default", "bold"],
+    "Matched": ["cyan"]
+  }
+}
