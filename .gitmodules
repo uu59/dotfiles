@@ -10,3 +10,9 @@
 [submodule "bats"]
 	path = bats
 	url = https://github.com/sstephenson/bats
+[submodule "/home/dora/dotfiles/zsh/anyframe"]
+	path = /home/dora/dotfiles/zsh/anyframe
+	url = https://github.com/mollifier/anyframe
+[submodule ".zsh/anyframe"]
+	path = .zsh/anyframe
+	url = https://github.com/mollifier/anyframe
