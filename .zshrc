@@ -18,12 +18,16 @@ fpath=(
   "$_ZSH_DIRECTORY/prompt"
   $fpath
   "$_ZSH_DIRECTORY/zsh-completions/src"(N-/)
+  "$_ZSH_DIRECTORY/anyframe"(N-/)
   "$HOME/src/git/contrib/completion"(N-/)
 )
+autoload -Uz anyframe-init
+anyframe-init
+zstyle ":anyframe:selector:" use peco
+
 autoload -Uz promptinit
 promptinit
 prompt "${ZSH_THEME:-"test2"}"
-
 # }}}
 
 # vcs_info {{{
@@ -189,13 +193,28 @@ bindkey '^W' tcsh-backward-delete-word
     # エラーになってしまうのでコンパイルしない
     # autoload -w "$compile_to/zce"
     # zle -N zce
-    bindkey '^T' zce
+    #bindkey '^T' zce # ^Tはanyframeで使うことにしたので現在未割り当て
     () {
       setopt localoptions braceccl
       zstyle ':zce:*' keys ${(j..)$(print fjdk{a-z})}
     }
   fi
 } # }}}
+
+() { # anyframe {{{
+# kill ^T that to be just prefix key for anyframe functions
+bindkey -r "^T"
+
+# easy to type binding because probably most common used
+bindkey '^T^t' anyframe-widget-insert-git-branch
+
+bindkey '^T^k' anyframe-widget-kill
+bindkey '^T^f' anyframe-widget-insert-filename
+bindkey '^T^g' anyframe-widget-cd-ghq-repository
+
+}
+# }}}
+
 # }}}
 
 # terminal multiplexer {{{
