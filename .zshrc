@@ -25,7 +25,7 @@ autoload -Uz anyframe-init
 anyframe-init
 alias peco="REPORTTIME=0 peco --rcfile=$_ZSH_DIRECTORY/pecorc.json"
 zstyle ":anyframe:selector:" use peco
-zstyle ":anyframe:selector:peco:" command "peco"
+zstyle ":anyframe:selector:peco:" command "peco --rcfile=$_ZSH_DIRECTORY/pecorc.json" # `alias peco` doesn't work?
 
 autoload -Uz promptinit
 promptinit
