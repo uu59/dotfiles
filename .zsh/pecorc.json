@@ -2,7 +2,7 @@
   "InitialFilter": "SmartCase",
   "Prompt": "peco>",
   "Keymap": {
-    "Space": "peco.ToggleSelectionAndSelectNext",
+    "C-o": "peco.ToggleSelectionAndSelectNext",
     "C-v": "peco.ToggleRangeMode"
   },
   "Style": {
