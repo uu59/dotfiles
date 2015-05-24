@@ -5,13 +5,12 @@ setup() {
 }
 
 @test "runnable zsh" {
-  DIR="${BATS_TEST_DIRNAME}/../"
+  DIR=$(cd "${BATS_TEST_DIRNAME}/../"; pwd)
   export ZDOTDIR=$BATS_TMPDIR/zsh-test
-  mkdir -p $ZDOTDIR
-  cp -a $DIR/.zsh* $ZDOTDIR/
-  cp -a $DIR/.zsh/* $ZDOTDIR/
-  run zsh -l -i -c exit
+  ln -sf $ZDOTDIR $DIR
+  run zsh -l -i -c "exit"
   [ $status -eq 0 ]
+  [ "$(strings <<< $output)" = "" ]
 }
 
 @test "executable nodebrew" {
