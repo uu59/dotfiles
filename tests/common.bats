@@ -43,3 +43,19 @@ debug() {
 @test "executable pip" {
   command -v pip
 }
+
+@test "executable go" {
+  command -v go
+}
+
+@test 'set $GOPATH' {
+  env | grep -F -q GOPATH
+}
+
+@test "executable ghq" {
+  command -v ghq
+}
+
+@test "executable peco" {
+  command -v peco
+}
