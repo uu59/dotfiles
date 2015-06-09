@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# https://gist.github.com/bleis-tift/1815369
+
 msg=${1:-"initial commit"}
  
 git init
