@@ -37,6 +37,7 @@ DOTFILES=$(dirname $0)
 
 update "$HOME/.rbenv"
 update "$HOME/.rbenv/plugins/ruby-build/"
+update "$HOME/.rbenv/plugins/rbenv-vars/"
 update "$HOME/.nodebrew/" "nodebrew selfupdate"
 update "$HOME/.pyenv/"
 update "$HOME" "go get -u github.com/motemen/ghq"
