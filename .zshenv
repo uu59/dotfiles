@@ -8,6 +8,8 @@ export EDITOR="vim"
 export GIT_EDITOR="vim -u $HOME/.vimrc.basic"
 case ${OSTYPE} in
   dargin*)
+    # https://github.com/tmux/tmux/issues/108
+    tmux set -g status-interval 0
     ;;
   linux*)
     export CFLAGS="-O2 -march=native -pipe"
