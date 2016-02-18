@@ -12,8 +12,8 @@ case ${OSTYPE} in
     tmux set -g status-interval 0
     ;;
   linux*)
-    export CFLAGS="-O2 -march=native -pipe"
-    export CXXFLAGS="${CFLAGS}"
+    #export CFLAGS="-O2 -march=native -pipe"
+    #export CXXFLAGS="${CFLAGS}"
     export MAKE_OPTS="-j $(grep -w -F -c processor /proc/cpuinfo)"
     ;;
 esac
