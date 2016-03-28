@@ -1,0 +1,7 @@
+cols=(environment name public_hostname)
+
+cmd="hotdog ls "
+for c in $cols; do
+  cmd="${cmd} -a ${c}"
+done
+eval $cmd | sort -k1 -r

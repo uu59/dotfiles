@@ -20,6 +20,7 @@ fpath=(
   "$_ZSH_DIRECTORY/zsh-completions/src"(N-/)
   "$_ZSH_DIRECTORY/anyframe"(N-/)
   "$HOME/src/git/contrib/completion"(N-/)
+  "$_ZSH_DIRECTORY/fpath"(N-/)
 )
 autoload -Uz anyframe-init
 anyframe-init
@@ -213,6 +214,8 @@ bindkey '^T^t' anyframe-widget-insert-git-branch
 bindkey '^T^k' anyframe-widget-kill
 bindkey '^T^f' anyframe-widget-insert-filename
 bindkey '^T^g' anyframe-widget-cd-ghq-repository
+bindkey '^T^h' anyframe-widget-hotdog
+
 
 }
 # }}}
