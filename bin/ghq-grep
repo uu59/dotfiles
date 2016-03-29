@@ -1,0 +1,28 @@
+#!/bin/bash
+#vim:set ft=bash:
+
+set -u
+
+usage_exit() {
+  echo hi
+  exit
+}
+
+ghq-grep() {
+  for repo in $(ghq list); do
+    cd "$(ghq root)/$repo"
+    if PAGER= git grep "$@" > /dev/null; then
+      PAGER= git grep --color "$@" | sed "s:^:$repo/:"
+      echo
+    fi
+  done
+}
+
+while getopts "h" flag; do
+  case "$flag" in
+    h) usage_exit;;
+  esac
+done
+shift $(( $OPTIND - 1 ))
+
+ghq-grep "$@"

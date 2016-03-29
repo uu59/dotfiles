@@ -1,0 +1,35 @@
+#!/bin/bash
+
+set -ue
+
+ask() {
+  local default=${2:-""}
+  printf "%s" "${1}: (${default}) " >&2
+  read in
+  echo ${in:-$default}
+}
+
+die() {
+  echo $1 >&2
+  exit 1
+}
+
+ghq-transform() {
+  local root="$(ghq root)"
+  local domain="github.com"
+  local org="$(ask "org" "treasure-data")"
+  [[ -z $org ]] && die "org is required"
+  local repo="$(ask "repo" "$(basename $PWD)")"
+  [[ -z $repo ]] && die "repo is required"
+  local fullpath="${root}/${domain}/${org}/${repo}"
+
+  read -p "${fullpath} ? (Y/n)" yn
+  [[ $yn == "n" ]] && die "canceled."
+
+  old="$PWD"
+  cd /
+  mv "$old" "$fullpath"
+  cd $fullpath
+}
+
+ghq-transform
