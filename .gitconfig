@@ -18,3 +18,5 @@
 [user]
 	name = uu59
 	email = k@uu59.org
+[core]
+	excludesfile = /Users/uu59/.gitignore_global
