@@ -8,13 +8,10 @@ usage_exit() {
   exit
 }
 
-ghq-grep() {
+ghq-git() {
   for repo in $(ghq list); do
     cd "$(ghq root)/$repo"
-    if PAGER= git grep "$@" > /dev/null; then
-      PAGER= git grep --color "$@" | sed "s:^:$repo/:"
-      echo
-    fi
+    git "$@" | sed "s#^#${repo}	#g"
   done
 }
 
@@ -25,4 +22,4 @@ while getopts "h" flag; do
 done
 shift $(( $OPTIND - 1 ))
 
-ghq-grep "$@"
+ghq-git "$@"
