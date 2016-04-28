@@ -20,3 +20,6 @@
 	email = k@uu59.org
 [core]
 	excludesfile = /Users/uu59/.gitignore_global
+	autocrlf = false
+[ghq]
+	root = /Users/uu59/.ghq
