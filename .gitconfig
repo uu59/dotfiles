@@ -18,10 +18,10 @@
 [rebase]
   autoStash = true
 [user]
-	name = uu59
-	email = k@uu59.org
+  name = uu59
+  email = k@uu59.org
 [core]
-	excludesfile = /Users/uu59/.gitignore_global
-	autocrlf = false
+  excludesfile = /Users/uu59/.gitignore_global
+  autocrlf = false
 [ghq]
-	root = /Users/uu59/.ghq
+  root = /Users/uu59/.ghq
