@@ -1,6 +1,6 @@
 # vim: set fdm=marker: 
 
-export TERM=xterm-256color
+#export TERM=xterm-256color
 local _ZSH_DIRECTORY="${HOME:-$ZDOTDIR}/.zsh"
 
 autoload -Uz add-zsh-hook
@@ -11,6 +11,15 @@ if [ -f "$HOME/.zsh/functions" ];then
   source $HOME/.zsh/functions
 fi
 
+# zplug {{{
+#source ~/.zplug/zplug
+#
+#zplug "mollifier/anyframe"
+#zplug "zsh-users/zsh-completions"
+#zplug "hchbaw/zce.zsh"
+#zplug load
+# }}}
+
 # prompt {{{
 
 # set $fpath before compinit
@@ -20,7 +29,6 @@ fpath=(
   "$_ZSH_DIRECTORY/zsh-completions/src"(N-/)
   "$_ZSH_DIRECTORY/anyframe"(N-/)
   "$HOME/src/git/contrib/completion"(N-/)
-  "$_ZSH_DIRECTORY/fpath"(N-/)
 )
 autoload -Uz anyframe-init
 anyframe-init
@@ -214,8 +222,6 @@ bindkey '^T^t' anyframe-widget-insert-git-branch
 bindkey '^T^k' anyframe-widget-kill
 bindkey '^T^f' anyframe-widget-insert-filename
 bindkey '^T^g' anyframe-widget-cd-ghq-repository
-bindkey '^T^h' anyframe-widget-hotdog
-
 
 }
 # }}}
@@ -283,6 +289,7 @@ zstyle ':completion:*' cache-path ~/.zsh/cache
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 
+
 # debug
 # r () {
 #   compdef -d rake
@@ -311,3 +318,8 @@ fi
 
 ### Added by the Heroku Toolbelt
 export PATH="/usr/local/heroku/bin:$PATH"
+
+if [ -f "$HOME/.zsh-local-only" ]; then
+  . "$HOME/.zsh-local-only"
+fi
+

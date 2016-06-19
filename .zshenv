@@ -2,10 +2,12 @@
 export PROMPT4="+ %x:%I $ "
 typeset -U path cdpath fpath manpath
 
+export XDG_CONFIG_HOME="$HOME/.config"
 export LS_COLORS="di=38;05;117"
 export LESS="--LONG-PROMPT --ignore-case --no-init -RF -i"
 export EDITOR="vim"
-export GIT_EDITOR="vim -u $HOME/.vimrc.basic"
+export GIT_EDITOR="vim -u $XDG_CONFIG_HOME/vim/.vimrc.basic"
+export VIMINIT="so $XDG_CONFIG_HOME/vim/.vimrc"
 case ${OSTYPE} in
   dargin*)
     # https://github.com/tmux/tmux/issues/108
@@ -40,18 +42,14 @@ export CHROME_OPTIONS="--no-referrers --disk-cache-dir=/tmp/chromecache --disk-c
 #  --renderer-process-limit=5 --disable-sync --disk-cache-size=1024000 --disable-print-preview\
 #  "
 
-if [ -f "$HOME/.zsh-local-only" ]; then
-  . "$HOME/.zsh-local-only"
-fi
-
 path=(
   #$HOME/.rbl/current/bin(N-/)
   $HOME/dotfiles/bin
   $HOME/.rbenv/bin(N-/)
-  $HOME/.nodebrew/current/bin(N-/)
   $HOME/.pyenv/versions/*/bin(N-/) # use pyenv as plain self-compiled python
   $HOME/.pyenv/bin(N-/)
   ${path}
+  $HOME/.nodebrew/current/bin(N-/) # lower priority than project local $(npm bin) on Vim
 )
 
 if [ $+commands[rbenv] -ne 0 ]; then
@@ -82,4 +80,8 @@ fi
 
 if [ $+commands[nodebrew] -ne 0 ]; then
   export NODE_PATH=$HOME/.nodebrew/current/lib/node_modules
+fi
+
+if [ -f "$HOME/.zsh-local-only" ]; then
+  # . "$HOME/.zsh-local-only"
 fi
