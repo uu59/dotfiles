@@ -222,6 +222,7 @@ bindkey '^T^t' anyframe-widget-insert-git-branch
 bindkey '^T^k' anyframe-widget-kill
 bindkey '^T^f' anyframe-widget-insert-filename
 bindkey '^T^g' anyframe-widget-cd-ghq-repository
+bindkey '^T^h' anyframe-widget-hotdog
 
 }
 # }}}

@@ -1,5 +1,5 @@
   anyframe-source-hotdog-ls \
     | anyframe-selector-auto \
-    | awk '{print $3}' \
+    | awk '{print $5}' \
     | anyframe-action-execute ssh --
 
