@@ -28,6 +28,7 @@ fpath=(
   $fpath
   "$_ZSH_DIRECTORY/zsh-completions/src"(N-/)
   "$_ZSH_DIRECTORY/anyframe"(N-/)
+  "$_ZSH_DIRECTORY/fpath"(N-/)
   "$HOME/src/git/contrib/completion"(N-/)
 )
 autoload -Uz anyframe-init
