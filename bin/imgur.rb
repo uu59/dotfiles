@@ -6,10 +6,13 @@
 # from earthquake.gem
 # https://gist.github.com/2901301
 API_KEY = "5cb04404b1ff26a88cbfe42de5aba23f"
+client_id = "ca82b78582ae88f"
 
 # setting
 browser_cmd = 'open'
 browser_cmd = "google-chrome --incognito"
+browser_cmd = "xdg-open"
+browser_cmd = "vivaldi-stable"
 # or directly browser_cmd = 'chromium-browser'
 
 require "erb"
@@ -17,13 +20,19 @@ require "optparse"
 require 'net/https'
 require "resolv-replace"
 require "json"
+require "timeout"
+require "grill"
+Grill.implant <<GEMFILE
+gem "httpclient"
+GEMFILE
 
 options = {
-  :timeout => 30,
-  :search => nil,
+  :timeout => 3,
+  :search => true,
 }
 OptionParser.new do |opts|
   opts.on('-s', '--search', 'search image by Google'){|v| options[:search] = true}
+  opts.on('-t VAL','--timeout=VAL', 'timeout in seconds'){|v| options[:timeout] = v.to_i}
   opts.on('-t VAL','--timeout=VAL', 'timeout in seconds'){|v| options[:timeout] = v.to_i}
   opts.parse!(ARGV)
 end
@@ -51,38 +60,53 @@ elsif system("which jhead > /dev/null")
   system("jhead","-purejpg",tmpfile)
 end
 
+client = HTTPClient.new
+# client.debug_dev = STDOUT
+
 begin
   puts "start uploading #{tmpfile} (#{File.size(tmpfile) / 1024} KB)"
-  timeout(options[:timeout]) do 
-    Net::HTTP.start("api.imgur.com", 80){|http|
-      p http
-      rs = http.post('/2/upload.json', "key=#{API_KEY}&image=#{[File.read(tmpfile)].pack('m').gsub(/[^a-zA-Z0-9]/){|m| "%%%02X" % m.ord}}")
+  auth_header = {
+    "Authorization" => "Client-ID #{client_id}"
+  }
+  rs = client.post("https://api.imgur.com/3/image", {
+    key: API_KEY,
+    image: File.open(tmpfile),
+    # image: "#{[File.read(tmpfile)].pack('m').gsub(/[^a-zA-Z0-9]/){|m| "%%%02X" % m.ord}}"
+  }, auth_header)
       res = JSON.parse(rs.body)
-      links = res["upload"]["links"]
-      puts "img: #{links["original"]}"
-      puts "delete: #{links["delete_page"]}"
-      puts "imgur: #{links["imgur_page"]}"
-      File.open(logfile, "a"){|f|
-        data = [
-          Time.now,
-          links["original"],
-          links["delete_page"]
-        ]
-        f.puts(data.join("\t"))
-      }
-      system "#{browser_cmd} '#{links["original"]}'"
+      puts "url: #{res["data"]["link"]}"
+      #links = res["upload"]["links"]
+      #puts "img: #{links["original"]}"
+      #puts "delete: #{links["delete_page"]}"
+      #puts "imgur: #{links["imgur_page"]}"
+      #system "#{browser_cmd} '#{links["original"]}'"
       if options[:search]
-        system(browser_cmd, "http://images.google.com/searchbyimage?image_url=#{ERB::Util.u(links["original"])}")
+        system(browser_cmd, "http://images.google.com/searchbyimage?image_url=#{ERB::Util.u(res["data"]["link"])}")
       end
-    }
-  end
-  File.delete(tmpfile)
+      puts
+      print "Enter to delete (#{options[:timeout]} seconds)"
+      begin
+        Timeout.timeout(options[:timeout]) do
+          STDIN.gets
+        end
+        raise Timeout::Error, "foo"
+      rescue Timeout::Error
+        res = client.delete("https://api.imgur.com/3/image/#{res["data"]["deletehash"]}", {}, auth_header)
+        if res.status >= 300
+          puts
+          p res.body
+        else
+          puts "Done."
+        end
+      end
+
 rescue => ex
   p ex
   if File.exists?(tmpfile)
     puts "you can retry uploading '#{$0} #{tmpfile}'"
   end
 ensure
+  File.delete(tmpfile)
 end
 
 =begin
