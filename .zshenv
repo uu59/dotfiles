@@ -5,9 +5,9 @@ typeset -U path cdpath fpath manpath
 export XDG_CONFIG_HOME="$HOME/.config"
 export LS_COLORS="di=38;05;117"
 export LESS="--LONG-PROMPT --ignore-case --no-init -RF -i"
-export EDITOR="vim"
-export GIT_EDITOR="vim -u $XDG_CONFIG_HOME/vim/.vimrc.basic"
-export VIMINIT="so $XDG_CONFIG_HOME/vim/.vimrc"
+export EDITOR="nvim"
+export GIT_EDITOR="nvim"
+export VIMINIT="so $XDG_CONFIG_HOME/vim/init.vim"
 case ${OSTYPE} in
   dargin*)
     # https://github.com/tmux/tmux/issues/108
