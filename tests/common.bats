@@ -59,3 +59,11 @@ debug() {
 @test "executable peco" {
   command -v peco
 }
+
+@test "executable jq" {
+  command -v jq
+}
+
+@test "executable neovim" {
+  command -v nvim
+}

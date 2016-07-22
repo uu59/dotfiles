@@ -15,6 +15,8 @@
   log = true
 [diff]
   algorithm = histogram
+[diff "json"]
+  textconv = "jq ."
 [rebase]
   autoStash = true
 [user]
