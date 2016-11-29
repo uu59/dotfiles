@@ -1,0 +1,6 @@
+# https://www.daemon-systems.org/man/editline.7.html
+# https://www.daemon-systems.org/man/editrc.5.html
+bind "^R" em-inc-search-prev
+bind "^G" em-inc-search-next
+bind "^U" vi-kill-line-prev
+history unique 10000
