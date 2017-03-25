@@ -88,7 +88,7 @@ _test2_update_prompt () {
       is_dirty=$(__is_git_dirty && printf "⚶  ")
     fi
     left_prompt=$'\n'"${left_prompt/__is_git_dirty/${is_dirty}}"$'\n'
-    if [[ -n $SSH_CONNECTION ]];then
+    if [[ -n "$SSH_CONNECTION" ]];then
       left_prompt+="%F{230%}$HOST%f "
     fi
     left_prompt+="%F{250%}%(!.#.$) %f"
