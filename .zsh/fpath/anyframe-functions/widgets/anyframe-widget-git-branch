@@ -1,6 +1,14 @@
-anyframe-source-git-branch-sorted \
+commits=$(
+  anyframe-source-git-branch-sorted \
   | anyframe-selector-auto \
-  | awk '{print $1}' \
-  | anyframe-action-execute git checkout 
+  | awk '{print $2}'
+)
+
+{
+  for hash in $commits; do
+    local_branch=$(git show-ref | grep "^$hash" | sed 's#.*refs/heads/##' | sed 's#.*refs/remotes/##' | head -1)
+    [[ -n $local_branch ]] && echo $local_branch || echo $hash
+  done
+} | anyframe-action-execute git checkout
 
 

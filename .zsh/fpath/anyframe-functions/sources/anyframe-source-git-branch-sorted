@@ -1,3 +1,6 @@
-git branch --list -vv --sort=-committerdate \
+git branch -a --list -vv --sort=-committerdate \
+  | sed 's#remotes/origin/pr#pr#' \
+  | grep -v 'remotes/origin' \
+  | sed 's#pr/#origin/pr/#' \
   | sed 's/^\*//' \
   | sed 's/^ *//'

@@ -19,6 +19,8 @@
   textconv = "jq ."
 [rebase]
   autoStash = true
+[remote "origin"]
+  fetch = +refs/pull/*/head:refs/remotes/origin/pr/*
 [user]
   name = uu59
   email = k@uu59.org
