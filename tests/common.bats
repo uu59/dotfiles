@@ -28,14 +28,6 @@ debug() {
   command -v npm
 }
 
-@test "executable coffee" {
-  command -v coffee
-}
-
-@test "executable babel" {
-  command -v babel
-}
-
 @test "executable python" {
   command -v python
 }
