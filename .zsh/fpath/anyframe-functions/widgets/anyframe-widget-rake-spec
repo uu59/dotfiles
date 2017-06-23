@@ -1,0 +1,14 @@
+targets=$(
+  anyframe-source-rspec-targets \
+  | anyframe-selector-auto \
+  | awk -F: '{print $1 ":" $2}' \
+  | tr '\n' ' '
+)
+
+if [ -z "$targets" ];then
+  # This is needed to tell to anyframe that peco is finished with nothing operation (e.g. cancelled by C-c)
+  echo | anyframe-action-execute
+else
+  # badly hack
+  echo rake spec | anyframe-action-execute SPEC="\"$targets\"" bundle exec
+fi

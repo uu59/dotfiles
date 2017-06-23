@@ -1,0 +1,2 @@
+find "$(git rev-parse --show-toplevel)/spec" -name "*_spec.rb" -print0 \
+  | xargs -0 grep -n -E '\W(it|describe)\W'

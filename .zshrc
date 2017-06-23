@@ -225,6 +225,7 @@ bindkey '^T^f' anyframe-widget-insert-filename
 bindkey '^T^g' anyframe-widget-cd-ghq-repository
 bindkey '^T^h' anyframe-widget-hotdog
 bindkey '^T^b' anyframe-widget-git-branch
+bindkey '^T^r' anyframe-widget-rake-spec
 
 }
 # }}}
