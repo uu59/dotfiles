@@ -327,3 +327,15 @@ if [ -f "$HOME/.zsh-local-only" ]; then
   . "$HOME/.zsh-local-only"
 fi
 
+pkg-config-rehash() {
+  # Mainly for libxml2 and libxslt, `gem i nokgoiri`
+  if (( ! $+commands[brew] ));then
+    echo "$0 supports Homebrew-powered OSX only"
+    return 1
+  fi
+
+  {
+    local REPORTTIME=1000
+    export PKG_CONFIG_PATH="$(find "$(brew --cellar)" -name 'pkgconfig' -type d | grep lib/pkgconfig | sort -r | tr '\n' ':' | sed s/.$//)"
+  }
+}
