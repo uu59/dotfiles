@@ -1,3 +1,4 @@
+# vim: set fdm=marker:
 #zmodload zsh/zprof && zprof
 export PROMPT4="+ %x:%I $ "
 typeset -U path cdpath fpath manpath
@@ -48,10 +49,13 @@ path=(
   $HOME/.rbenv/bin(N-/)
   $HOME/.pyenv/versions/*/bin(N-/) # use pyenv as plain self-compiled python
   $HOME/.pyenv/bin(N-/)
+  $HOME/.jenv/bin(N-/)
+  $HOME/.jenv/shims(N-/)
   ${path}
   $HOME/.nodebrew/current/bin(N-/) # lower priority than project local $(npm bin) on Vim
 )
 
+# rbenv {{{
 if [ $+commands[rbenv] -ne 0 ]; then
   rbenv_init(){
     # eval "$(rbenv init - --no-rehash)" is crazy slow (it takes arround 100ms)
@@ -77,11 +81,38 @@ if [ $+commands[rbenv] -ne 0 ]; then
   rbenv_init
   unfunction rbenv_init
 fi
+# }}}
 
+# nodebrew {{{
 if [ $+commands[nodebrew] -ne 0 ]; then
   export NODE_PATH=$HOME/.nodebrew/current/lib/node_modules
 fi
+# }}}
+
+# jenv {{{
+[ -d "$HOME/.jenv" ] && {
+  source "$HOME/.jenv/libexec/../completions/jenv.zsh"
+  # jenv rehash 2>/dev/null
+  export JENV_LOADED=1
+  unset JAVA_HOME
+  jenv() {
+    typeset command
+    command="$1"
+    if [ "$#" -gt 0 ]; then
+      shift
+    fi
+
+    case "$command" in
+    enable-plugin|rehash|shell|shell-options)
+      eval `jenv "sh-$command" "$@"`;;
+    *)
+      command jenv "$command" "$@";;
+    esac
+  }
+}
+# }}}
 
 if [ -f "$HOME/.zsh-local-only" ]; then
+  # Loaded on .zshrc
   # . "$HOME/.zsh-local-only"
 fi
