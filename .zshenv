@@ -51,6 +51,7 @@ path=(
   $HOME/.pyenv/bin(N-/)
   $HOME/.jenv/bin(N-/)
   $HOME/.jenv/shims(N-/)
+  /sbin(N-) # for Mac http://kurochan-note.hatenablog.jp/entry/2014/01/11/144008
   ${path}
   $HOME/.nodebrew/current/bin(N-/) # lower priority than project local $(npm bin) on Vim
 )
