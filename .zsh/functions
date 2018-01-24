@@ -103,41 +103,27 @@ __current_ruby_version() {
 __ruby_version() {
   [[ $+commands[ruby] -eq 0 ]] && return
 
+  # rbenv shell
   if [[ -n $RBENV_VERSION ]];then
     echo $RBENV_VERSION
     return
   fi
 
-  local -a readlink
-  case "${OSTYPE}" in
-    linux*)
-      readlink=(readlink -e)
-      ;;
-    darwin*)
-      readlink=(readlink )
-      ;;
-  esac
-  local ruby_path="$(command -v ruby)"
-  while [[ -h $ruby_path ]];do
-    ruby_path="$($readlink $ruby_path)" # for OSX, readlink returns "" if ruby is not symlink
-  done
-  local cache="${ZDOTDIR-$HOME}/.zsh/cache$ruby_path"
-  [[ -f $cache ]] && echo $(< $cache) && return
-
-  mkdir -p ${cache%/*}
-  local ruby_ver
-  if [ -n "$ruby_path" ];then
-    : ${ruby_ver:="$(echo $ruby_path | grep -o -E '[0-9]\.[0-9]\.[0-9]-p[0-9]+')"}
-    if [ -z "$ruby_ver" ];then
-      if [ $+commands[rbenv] -ne 0 ];then
-        ruby_ver=$(rbenv version-name)
-      elif [ $+commands[ruby] -ne 0 ] ;then
-        ruby_ver=$(ruby -e 'print %Q!#{RUBY_VERSION}-p#{RUBY_PATCHLEVEL}!')
-        echo -n $ruby_ver > $cache
-      fi
+  if __is_inside_git; then
+    local file="$(git rev-parse --show-toplevel)/.ruby-version"
+    if [[ -f "$file" ]]; then
+      echo $(< "$file")
+      return
     fi
   fi
-  echo $ruby_ver
+
+  local _rbenv_version="$(rbenv version | cut -f1 -d " ")"
+  if [[ -n $_rbenv_version ]]; then
+    echo $_rbenv_version
+    return
+  fi
+
+  ruby -v | grep -o -E '[0-9]+\.[0-9]+\.[0-9]+'
 }
 
 __is_inside_git() {
