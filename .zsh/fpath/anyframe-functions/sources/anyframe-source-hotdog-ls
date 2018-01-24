@@ -1,4 +1,4 @@
-cols=(ssh_hostname chef_environment chef_role)
+cols=(ssh_ipv4 chef_environment chef_role)
 
 cmd="hotdog ls "
 for c in $cols; do
