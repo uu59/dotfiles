@@ -198,21 +198,6 @@ bindkey '^W' tcsh-backward-delete-word
   # fi
 } # }}}
 
-() { # zce {{{
-  local zce="$_ZSH_DIRECTORY/zce.zsh/zce.zsh"
-    if [ -f "$zce" ]; then
-    . $zce
-    # エラーになってしまうのでコンパイルしない
-    # autoload -w "$compile_to/zce"
-    # zle -N zce
-    #bindkey '^T' zce # ^Tはanyframeで使うことにしたので現在未割り当て
-    () {
-      setopt localoptions braceccl
-      zstyle ':zce:*' keys ${(j..)$(print fjdk{a-z})}
-    }
-  fi
-} # }}}
-
 () { # anyframe {{{
 # kill ^T that to be just prefix key for anyframe functions
 bindkey -r "^T"
@@ -221,12 +206,20 @@ bindkey -r "^T"
 bindkey '^T^t' anyframe-widget-insert-git-branch
 
 bindkey '^T^k' anyframe-widget-kill
-bindkey '^T^f' anyframe-widget-insert-filename
+# bindkey '^T^f' anyframe-widget-insert-filename
 bindkey '^T^g' anyframe-widget-cd-ghq-repository
 bindkey '^T^h' anyframe-widget-hotdog
 bindkey '^T^b' anyframe-widget-git-branch
 bindkey '^T^r' anyframe-widget-rake-spec
 
+}
+
+() { # easy-moton
+  local easy_motion="$_ZSH_DIRECTORY/zsh-easy-motion/easy_motion.plugin.zsh"
+  if [[ -f "$easy_motion" ]]; then
+    . "$easy_motion"
+    bindkey '^T^f' vi-easy-motion
+  fi
 }
 # }}}
 
