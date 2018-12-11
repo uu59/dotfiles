@@ -213,8 +213,9 @@ bindkey '^T^b' anyframe-widget-git-branch
 bindkey '^T^r' anyframe-widget-rake-spec
 
 }
+# }}}
 
-() { # easy-moton
+() { # easy-moton {{{
   local easy_motion="$_ZSH_DIRECTORY/zsh-easy-motion/easy_motion.plugin.zsh"
   if [[ -f "$easy_motion" ]]; then
     . "$easy_motion"
@@ -222,7 +223,6 @@ bindkey '^T^r' anyframe-widget-rake-spec
   fi
 }
 # }}}
-
 # }}}
 
 # terminal multiplexer {{{
