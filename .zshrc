@@ -201,17 +201,15 @@ bindkey -r "^T"
 } # }}}
 
 () { # anyframe {{{
+  # easy to type binding because probably most common used
+  # bindkey '^T^t' anyframe-widget-insert-git-branch
 
-# easy to type binding because probably most common used
-bindkey '^T^t' anyframe-widget-insert-git-branch
-
-bindkey '^T^k' anyframe-widget-kill
-# bindkey '^T^f' anyframe-widget-insert-filename
-bindkey '^T^g' anyframe-widget-cd-ghq-repository
-bindkey '^T^h' anyframe-widget-hotdog
-bindkey '^T^b' anyframe-widget-git-branch
-bindkey '^T^r' anyframe-widget-rake-spec
-
+  bindkey '^T^k' anyframe-widget-kill
+  # bindkey '^T^f' anyframe-widget-insert-filename
+  bindkey '^T^g' anyframe-widget-cd-ghq-repository
+  bindkey '^T^h' anyframe-widget-hotdog
+  bindkey '^T^b' anyframe-widget-git-branch
+  bindkey '^T^r' anyframe-widget-rake-spec
 }
 # }}}
 
@@ -219,7 +217,7 @@ bindkey '^T^r' anyframe-widget-rake-spec
   local easy_motion="$_ZSH_DIRECTORY/zsh-easy-motion/easy_motion.plugin.zsh"
   if [[ -f "$easy_motion" ]]; then
     . "$easy_motion"
-    bindkey '^T^f' vi-easy-motion
+    bindkey '^T^t' vi-easy-motion
   fi
 }
 # }}}
