@@ -5,7 +5,7 @@ typeset -U path cdpath fpath manpath
 
 export XDG_CONFIG_HOME="$HOME/.config"
 export LS_COLORS="di=38;05;117"
-export LESS="--LONG-PROMPT --ignore-case --no-init -RF -i"
+export LESS="--LONG-PROMPT --ignore-case --no-init -RF"
 export EDITOR="nvim"
 export GIT_EDITOR="nvim"
 export VIMINIT="so $XDG_CONFIG_HOME/vim/init.vim"
@@ -47,6 +47,7 @@ path=(
   #$HOME/.rbl/current/bin(N-/)
   $HOME/dotfiles/bin
   $HOME/.rbenv/bin(N-/)
+  $HOME/.rbenv/shims/(N-/)
   $HOME/.pyenv/versions/*/bin(N-/) # use pyenv as plain self-compiled python
   $HOME/.pyenv/bin(N-/)
   $HOME/.jenv/bin(N-/)
@@ -77,7 +78,6 @@ if [ $+commands[rbenv] -ne 0 ]; then
         command rbenv "$command" "$@";;
       esac
     }
-    path=($HOME/.rbenv/shims $path)
   }
   rbenv_init
   unfunction rbenv_init
