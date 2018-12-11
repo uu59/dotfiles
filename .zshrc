@@ -168,6 +168,8 @@ tcsh-backward-delete-word () {
 zle -N tcsh-backward-delete-word
 bindkey '^W' tcsh-backward-delete-word
 
+# ^T is a prefix for plugins
+bindkey -r "^T"
 # }}}
 
 # plugins {{{
@@ -199,8 +201,6 @@ bindkey '^W' tcsh-backward-delete-word
 } # }}}
 
 () { # anyframe {{{
-# kill ^T that to be just prefix key for anyframe functions
-bindkey -r "^T"
 
 # easy to type binding because probably most common used
 bindkey '^T^t' anyframe-widget-insert-git-branch
