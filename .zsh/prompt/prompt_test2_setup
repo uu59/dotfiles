@@ -85,7 +85,7 @@ _test2_update_prompt () {
   update_left_prompt() { # for readability of zprof
     local is_dirty
     if [[ -n $vcs_info_msg_0_ ]];then
-      is_dirty=$(__is_git_dirty && printf "⚶  ")
+      is_dirty=$(__is_git_dirty && printf "+ ")
     fi
     left_prompt=$'\n'"${left_prompt/__is_git_dirty/${is_dirty}}"$'\n'
     if [[ -n "$SSH_CONNECTION" ]];then

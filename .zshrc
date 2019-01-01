@@ -273,6 +273,7 @@ local GIT_COMPLETION_FILE="${GIT_COMPLETION_FILE:-${HOME}/src/git/contrib/comple
 if [ -n "$GIT_COMPLETION_FILE" -a -f "$GIT_COMPLETION_FILE" ];then
   zstyle ':completion:*:*:git:*' script $GIT_COMPLETION_FILE
 fi
+
 autoload -Uz compinit
 compinit -C
 
