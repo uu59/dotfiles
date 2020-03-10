@@ -90,26 +90,10 @@ if [ $+commands[nodebrew] -ne 0 ]; then
 fi
 # }}}
 
-# jenv {{{
-[ -d "$HOME/.jenv" ] && {
-  source "$HOME/.jenv/libexec/../completions/jenv.zsh"
-  # jenv rehash 2>/dev/null
-  export JENV_LOADED=1
-  unset JAVA_HOME
-  jenv() {
-    typeset command
-    command="$1"
-    if [ "$#" -gt 0 ]; then
-      shift
-    fi
-
-    case "$command" in
-    enable-plugin|rehash|shell|shell-options)
-      eval `jenv "sh-$command" "$@"`;;
-    *)
-      command jenv "$command" "$@";;
-    esac
-  }
+# sdkman {{{
+[ -d "$HOME/.sdkman" ] && {
+  export SDKMAN_DIR="$HOME/.sdkman"
+  source $HOME/.sdkman/bin/sdkman-init.sh
 }
 # }}}
 
